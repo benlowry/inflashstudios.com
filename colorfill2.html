@@ -5,20 +5,12 @@
     <style type="text/css">
 		@import url("/style.css");
 	</style>
-	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript" src="/swfobject.js"></script>
 	<script type="text/javascript">
 	function show(img, el)
 	{
 		document.getElementById(el).src = img;
 	}
-	</script>
-	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
-	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
-	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
-	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
-	<script type="text/javascript">
-	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
-	SyntaxHighlighter.all();
 	</script>
 </head>
 <body>
@@ -82,34 +74,11 @@
 		
 			<div class="game">
 				
+				<div id="gameholder"></div>
 				<script type="text/javascript">
-					if (AC_FL_RunContent == 0) {
-						alert("This page requires AC_RunActiveContent.js.");
-					} else {
-						AC_FL_RunContent(
-							'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0',
-							'width', '550',
-							'height', '400',
-							'src', 'colorfill2',
-							'quality', 'high',
-							'pluginspage', 'http://www.macromedia.com/go/getflashplayer',
-							'align', 'middle',
-							'play', 'true',
-							'loop', 'true',
-							'scale', 'showall',
-							'devicefont', 'false',
-							'id', 'colorfill2',
-							'bgcolor', '#000000',
-							'name', 'colorfill2',
-							'menu', 'true',
-							'allowFullScreen', 'false',
-							'allowScriptAccess','sameDomain',
-							'movie', 'colorfill2',
-							'salign', ''
-							); //end AC code
-					}
-				</script>
-
+				swfobject.embedSWF("colorfill2/colorfill2.swf", "gameholder", "550", "400", "9.0.0");
+				</script>				
+				
 			</div>
 
 		</div>
@@ -135,7 +104,7 @@
 &lt;param name="allowFullScreen" value="false" /&gt;
 &lt;param name="movie" value="http://www.inflashstudios.com/colorfill2/colorfill2.swf" /&gt;&lt;param name="quality" value="high" /&gt;&lt;param name="wmode" value="transparent" /&gt;&lt;param name="bgcolor" value="#000000" /&gt;	&lt;embed src="http://www.inflashstudios.com/colorfill2/colorfill2.swf" quality="high" wmode="transparent" bgcolor="#000000" width="550" height="400" name="colorfill2" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /&gt;
 &lt;/object&gt;
-&lt;a href="http://www.inflashstudios.com/colorfill2/default.aspx"&gt;Get ColorFill 2&lt;/a&gt;</textarea>
+&lt;a href="http://www.inflashstudios.com/colorfill2.html"&gt;Get ColorFill 2&lt;/a&gt;</textarea>
 		</div>
 
 		<img class="boxedge" src="/images/boxbottom.png" alt="" />

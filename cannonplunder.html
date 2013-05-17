@@ -5,20 +5,12 @@
     <style type="text/css">
 		@import url("/style.css");
 	</style>
-	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript" src="/swfobject.js"></script>
 	<script type="text/javascript">
 	function show(img, el)
 	{
 		document.getElementById(el).src = img;
 	}
-	</script>
-	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
-	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
-	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
-	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
-	<script type="text/javascript">
-	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
-	SyntaxHighlighter.all();
 	</script>
 </head>
 <body>
@@ -79,37 +71,14 @@
 
 			<h1>Play Cannon Plunder</h1>
 			<p>Get the coins!  When you finish beating our levels play the levels other people have made, or create your own.</p>
-			<p>Cannon Plunder also has an official website at <a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> and a <a href="http://www.facebook.com/apps/application.php?id=192156316353">Facebook app</a>!</p>
+			<p>Cannon Plunder also has an official website at <a href="http://www.cannonplunder.com/">Cannon Plunder.com</a>.</p>
 			<p>Thanks to our awesome sponsor <a href="http://www.agame.com">AGAME</a> Cannon Plunder is available in 12 languages!</p>
 		
 			<div class="game">
 				
+				<div id="gameholder"></div>
 				<script type="text/javascript">
-					if (AC_FL_RunContent == 0) {
-						alert("This page requires AC_RunActiveContent.js.");
-					} else {
-						AC_FL_RunContent(
-							'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0',
-							'width', '550',
-							'height', '400',
-							'src', 'cannonplunder',
-							'quality', 'high',
-							'pluginspage', 'http://www.macromedia.com/go/getflashplayer',
-							'align', 'middle',
-							'play', 'true',
-							'loop', 'true',
-							'scale', 'showall',
-							'devicefont', 'false',
-							'id', 'cannonplunder',
-							'bgcolor', '#000000',
-							'name', 'cannonplunder',
-							'menu', 'true',
-							'allowFullScreen', 'false',
-							'allowScriptAccess','sameDomain',
-							'movie', 'cannonplunder',
-							'salign', ''
-							); //end AC code
-					}
+				swfobject.embedSWF("cannonplunder/cannonplunder.swf", "gameholder", "550", "400", "9.0.0");
 				</script>
 
 			</div>
@@ -137,7 +106,7 @@
 &lt;param name="allowFullScreen" value="false" /&gt;
 &lt;param name="movie" value="http://www.inflashstudios.com/cannonplunder/cannonplunder.swf" /&gt;&lt;param name="quality" value="high" /&gt;&lt;param name="wmode" value="transparent" /&gt;&lt;param name="bgcolor" value="#000000" /&gt;	&lt;embed src="http://www.inflashstudios.com/cannonplunder/cannonplunder.swf" quality="high" wmode="transparent" bgcolor="#000000" width="550" height="400" name="colorfill" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /&gt;
 &lt;/object&gt;
-&lt;a href="http://www.inflashstudios.com/cannonplunder/default.aspx"&gt;Play Cannon Plunder&lt;/a&gt;</textarea>
+&lt;a href="http://www.inflashstudios.com/cannonplunder.html"&gt;Play Cannon Plunder&lt;/a&gt;</textarea>
 		</div>
 
 		<img class="boxedge" src="/images/boxbottom.png" alt="" />

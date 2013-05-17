@@ -5,21 +5,14 @@
     <style type="text/css">
 		@import url("/style.css");
 	</style>
-	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript" src="/swfobject.js"></script>
 	<script type="text/javascript">
 	function show(img, el)
 	{
 		document.getElementById(el).src = img;
 	}
 	</script>
-	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
-	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
-	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
-	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
-	<script type="text/javascript">
-	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
-	SyntaxHighlighter.all();
-	</script>
+
 </head>
 <body>
 
@@ -78,37 +71,13 @@
 		<div class="boxinner">
 
 			<h1>Play Sudoku</h1>
-			<p>Sudoku was another of my early adventures migrating to Actionscript 3.0.  I've written a <a href="/sudoku/tutorial.aspx">tutorial </a> on how you can create Sudoku yourself in Flash.  The funnest part was creating the algorithm that generates the puzzle without bringing Flash to its knees.</p>
+			<p>Sudoku was another of my early adventures migrating to Actionscript 3.0.  I've written a <a href="/sudoku/tutorial.html">tutorial </a> 
+				on how you can create Sudoku yourself in Flash.  The funnest part was creating the algorithm that generates the puzzle without bringing Flash to its knees.</p>
 		
 			<div class="game">
 				
 				<script type="text/javascript">
-					if (AC_FL_RunContent == 0) {
-						alert("This page requires AC_RunActiveContent.js.");
-					} else {
-						AC_FL_RunContent(
-							'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0',
-							'width', '470',
-							'height', '530',
-							'src', 'sudoku',
-							'quality', 'high',
-							'pluginspage', 'http://www.macromedia.com/go/getflashplayer',
-							'align', 'middle',
-							'play', 'true',
-							'loop', 'true',
-							'scale', 'showall',
-							'wmode', 'transparent',
-							'devicefont', 'false',
-							'id', 'sudoku',
-							'bgcolor', '#000000',
-							'name', 'sudoku',
-							'menu', 'true',
-							'allowFullScreen', 'false',
-							'allowScriptAccess','sameDomain',
-							'movie', 'sudoku',
-							'salign', ''
-							); //end AC code
-					}
+				swfobject.embedSWF("sudoku/sudoku.swf", "gameholder", "530", "470", "9.0.0");
 				</script>
 
 			</div>
@@ -137,7 +106,7 @@
 &lt;param name="allowFullScreen" value="false" /&gt;
 &lt;param name="movie" value="http://www.inflashstudios.com/sudoku/sudoku.swf" /&gt;&lt;param name="quality" value="high" /&gt;&lt;param name="wmode" value="transparent" /&gt;&lt;param name="bgcolor" value="#000000" /&gt;	&lt;embed src="http://www.inflashstudios.com/sudoku/sudoku.swf" quality="high" wmode="transparent" bgcolor="#000000" width="470" height="530" name="sudoku" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /&gt;
 &lt;/object&gt;
-&lt;a href="http://www.inflashstudios.com/sudoku/default.aspx"&gt;Get Sudoku&lt;/a&gt; | &lt;a href="http://www.inflashstudios.com/sudoku/tutorial.aspx"&gt;Learn how to make Sudoku in Flash&lt;/a&gt;</textarea>
+&lt;a href="http://www.inflashstudios.com/sudoku.html"&gt;Get Sudoku&lt;/a&gt; | &lt;a href="http://www.inflashstudios.com/sudoku/tutorial.aspx"&gt;Learn how to make Sudoku in Flash&lt;/a&gt;</textarea>
 		</div>
 
 		<img class="boxedge" src="/images/boxbottom.png" alt="" />
