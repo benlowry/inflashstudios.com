@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Source: Coordinates.as | Learn how to make Minesweeper in Flash ~ InFlash Studios</title>
+	<style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Minesweeper in Flash</h1>
+			
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/minesweeper/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/minesweeper/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/minesweeper/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/minesweeper/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/minesweeper/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/minesweeper/source/Coordinates.as.html">Source: Coordinates.as</a></li>
+				<li><a href="/minesweeper/source/minesweeper.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Source: Coordinates.as</h1>
+
+			<pre>package Minesweeper
+{
+    <span class="blue">public</span> <span class="blue">class</span> Coordinates
+    {
+        <span class="blue">public</span> <span class="blue">var</span> X:int;
+        <span class="blue">public</span> <span class="blue">var</span> Y:int;
+
+        <span class="blue">public</span> <span class="blue">function</span> Coordinates(y:int, x:int)
+        {
+            <span class="olive">this</span>.X = x;
+            <span class="olive">this</span>.Y = y;
+        }
+    }
+}</pre>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/minesweeper/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/minesweeper/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/minesweeper/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/minesweeper/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/minesweeper/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/minesweeper/source/Coordinates.as.html">Source: Coordinates.as</a></li>
+				<li><a href="/minesweeper/source/minesweeper.zip">Download the complete source</a></li>
+			</ul>
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

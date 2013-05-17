@@ -1,0 +1,114 @@
+<BG_IMAGE>Background.png</BG_IMAGE>
+<CAPTION>TUTORIAL TUTORIAL:</b> MAKE A TUTORIAL!
+
+This is a tutorial on how to make tutorials using our Shootorial tutorial shell.  
+
+CLICK ANYWHERE TO START!
+</CAPTION>
+<TITLE>Make a Tutorial!</TITLE>
+<TITLE_LONG><b>Tutorial Tutorial</b>
+
+<b>Level:</b> beginner
+<b>Covers:</b> basic info about making a tutorial
+<b>This:</b> i'm not sure what TITLE_LONG does to be honest...
+
+<b>Click anywhere to start.</b></TITLE_LONG>
+
+<PAGE>
+<GROUP_TEXT>
+<font color='#ffffff'><b>Tutorial Tutorial: Make a Tutorial</b></font>
+
+This brief tutorial is designed to show you how to make your own coding tutorial using our "Shootorial" tutorial shell.  Amazingly enough, all it takes is collecting some pictures and editing a text file and you have your very own programming tutorial!
+
+In this tutorial we will:
+
+1) Download the .swf and .txt files you will need for the tutorial.
+2) Learn how to modify the .txt file for your own tutorial.
+3) Go over the licensing requirements to use this tool.
+
+By the way, thanks to Moly for having the idea to modify these tutorials and for making the unofficial AS3 versions of the Shootorials.  Also, as a slight disclaimer, I did not originally write the tutorial application so it's possible I've made a mistake in here and there are a couple of things I'm not sure about.  
+
+You may want to include the following directions on the first page of your tutorial:
+
+Click on the "next page" button at the bottom of the screen to advance through this tutorial. You can revisit any page at any time by using the page navigation buttons at the bottom of this screen. 
+
+Now, prepare for self-referential madness that would make Douglas Hofstadter proud.  
+
+<PAGE>
+<GROUP_TEXT>
+<font color='#ffffff'><b>Downloading the Files You Need</b></font>
+
+You will need two files in order to make a tutorial: the .swf and a .txt file.  You will also likely want to add some images and sample .swf's on your own, but we'll go over that later.  
+
+1) You can download the .swf, which is the shell (or engine if you will) that runs the tutorials from this link: 
+
+<b><a href="assets/ShootorialShell.swf" target="_blank">Shootorial Tutorial Shell</a></b>
+
+2) The .txt file that created the tutorial you're looking at is available here:
+
+<b><a href="asFunction:Tutorial.loadNewURL,tutorial.txt">Tutorial Text File</a></b>
+
+I'd recommend reading the .txt file while looking at the tutorial since a lot of it will make more sense when you can see the code.  
+
+Note that both of those are relative links.  They refer to a file that you uploaded in a zip as a supplemental file.  We'll discuss that later.  Also, for those reading along on the .txt file, you'll notice that these are two different methods of linking.  Either works, except that the asFunction will only work for local files.  External links must use a normal href link and will require a right-click to open in a new page.
+
+<PAGE>
+<GROUP_TEXT>
+<font color='#ffffff'><b>Functions of the Text File</b></font>
+
+Generally, anyone editing this .txt file is going to be fairly proficient with coding (since you're making a coding material), so we'll just go through a few examples of what you can do and you can follow along by reading the .txt file. 
+
+You can post images like this:
+<GROUP_IMAGE>
+Image1.png
+<GROUP_TEXT>
+
+These pictures are clickable and will zoom to full size.  Note, the images should be less than 700 pixels wide or they will stick off the edges when zoomed.  
+
+You can use some <i>html</i> <b>markup</b> as well to format your text.  Unlike html though, the text file is sensitive to white space.  Note that a blank line is put at the top of each page under the title heading - if you don't do this, the text will be halfway in the grey title bar.
+
+You can proceed to the next page with the PAGE command (not visible unless you're reading the text file...).  Page numbers and navigation are handled automatically for you.
+
+<PAGE>
+<GROUP_TEXT>
+<font color='#ffffff'><b>More Functions of the Text File</b></font>
+
+Code can be entered with the following tag.  Note that code can be copied and pasted unlike normal text and images.
+
+<GROUP_CODE>
+package{	import flash.display.MovieClip;		public class Swarmer extends MovieClip	{
+
+<GROUP_TEXT>
+If you want to show how some code works, you can embed sample .swf's:
+
+<GROUP_SWF>
+KongLoader30.swf
+<GROUP_TEXT>
+Finally, if you look at the top of the .txt file, you'll see how to set the background image and custom title screen.  The background file should be 700 x 600 in order to fully fill the background of the .swf.  I just used a grey background (it's a screenshot of the default gray from CS4 if anyone's wondering).  
+<PAGE>
+<GROUP_TEXT>
+<font color='#ffffff'><b>Uploading Your Tutorial</b></font>
+
+Once you've written all the text you like, you simply need to upload the .swf along with a .zip file including your .txt file and any supplementary materials (images, sample .swf's, .fla files to download, etc.) as a supplemental file.  You can do this by clicking the "I would like to upload additional files" option and then adding your .zip file.  Make certain that your zip file is named "assets.zip".  Also, the text file must be named "tutorial.txt".  
+
+So, to be clear, when using GROUP_IMAGE or GROUP_SWF, all you need is the name of the file since the .swf assumes it will be found in an assets/ folder.  If you're going to make a link by hand, link to assets/foo.bar.  
+
+<GROUP_IMAGE>
+Image2.png
+<GROUP_TEXT>
+Once you've done that, you can simply use local references to those files (keeping in mind that they are located in assets/foo.bar) in order to download them, as was shown earlier.  
+<PAGE>
+<GROUP_TEXT>
+<font color='#ffffff'><b>Requirements for Tutorials</b></font>
+
+We want to encourage everyone to use the tutorial tool to help teach developers about ActionScript programming.  As such, you're welcome to distribute your tutorials anywhere on the 'net.  However, we do require that you give us credit and a link back to our tutorials page, which is http://www.kongregate.com/tutorials-games.  The easiest way to do this is to put something like this at the beginning or end of the tutorial.
+
+Tutorial Engine powered by:
+
+<a href="http://www.kongregate.com/tutorials-games" target="_blank"><img src="http://cdn1.kongregate.com/images/sharedassets/badge179x36antleft.gif" width="179" height="36" alt="Kongregate logo"></a>
+<GROUP_TEXT>
+(right-click to access link)
+
+<GROUP_TEXT>
+Well, that's all.  There's a forum thread <b><a href="http://www.kongregate.com/forums/4/topics/52603">here</a></b> (right click to open in new window) where you can ask questions and discuss the Tutorial Tutorial.  Make sure you select the Tutorials game category when you upload your own tutorial.  We look forward to seeing what you can do with it!  
+

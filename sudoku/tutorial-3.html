@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Part 3: Programming the cells | Learn how to make Sudoku in Flash ~ InFlash Studios</title>
+    <style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+			
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Sudoku in Flash</h1>
+			
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/sudoku/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/sudoku/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/sudoku/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/sudoku/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/sudoku/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/sudoku/source/sudoku.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Part 3: Programming the cells</h1>
+
+			<h2>Set up your file</h2>
+
+			<p>This file controls an actual cell in the game.  A cell consists of two textfields, one for the big number and a 'scratch' field for people to put notes in, like "1,3,5" if those are possible combinations for a cell.</p>
+			<p>There are also three different TextFormats for the cell, one for a cell where the game has given the answer, one for a cell where the user gives the answer, and one for the scratch field.  Finally there are some Events that we need to create so when people click on, tab to or write in a cell we can run some checks.</p>
+
+			<p>In your Cell.as the first thing we need to do is set it up so that it is in the right package and class.</p>
+
+			<pre>package Sudoku
+{
+    <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">display</span>.<span class="olive">MovieClip</span>;
+
+    <span class="blue">public</span> <span class="blue">class</span> Cell <span class="blue">extends</span> <span class="olive">MovieClip</span>
+    {
+    }
+}</pre>
+
+			<h2>Properties</h2>
+			<p>Some of the properties cells need is common, that is used by every instance.  When we have this scenario the best thing to do is create 'shared' properties that they will all use.  The alternative is every instance (81 cells) has their own private copy (3 textformats), which adds up to a lot of overhead (not so much in Sudoku, but imagine 1000 missiles with 20 properties).</p>
+
+			<h3>Text Formatting</h3>
+			<p>Our text formats are shared by every instance.  They control the way the text looks when you have entered an answer, when the game provides or reveals an answer, and for the scratch textfield.</p>
+
+			<pre><span class="blue">private</span> <span class="blue">static</span> const HintFormat:<span class="olive">TextFormat</span> = <span class="blue">new</span> <span class="olive">TextFormat</span>();
+HintFormat.<span class="olive">size</span> = 25;
+HintFormat.<span class="olive">color</span> = 0x666666;
+HintFormat.<span class="olive">font</span> = "<span class="magenta">Arial</span>";
+HintFormat.<span class="olive">align</span> = TextFormatAlign.CENTER;
+
+<span class="blue">private</span> <span class="blue">static</span> const AnswerFormat:<span class="olive">TextFormat</span> = <span class="blue">new</span> <span class="olive">TextFormat</span>();
+AnswerFormat.<span class="olive">size</span> = 25;
+AnswerFormat.<span class="olive">color</span> = 0x000000;
+AnswerFormat.<span class="olive">font</span> = "<span class="magenta">Arial</span>";
+AnswerFormat.<span class="olive">align</span> = TextFormatAlign.CENTER;
+
+<span class="blue">private</span> <span class="blue">static</span> const ScratchFormat:<span class="olive">TextFormat</span> = <span class="blue">new</span> <span class="olive">TextFormat</span>();
+ScratchFormat.<span class="olive">size</span> = 10;
+ScratchFormat.<span class="olive">color</span> = 0x666666;
+ScratchFormat.<span class="olive">font</span> = "<span class="magenta">Arial</span>";
+ScratchFormat.<span class="olive">align</span> = TextFormatAlign.<span class="olive">LEFT</span>;</pre>
+
+			<h3>Our cell-specific data</h3>
+			<p>Every cell has its own copy of this data.</p>
+
+			<pre><span class="green">// The cell state information</span>
+<span class="blue">public</span> <span class="blue">var</span> Answer:int;
+<span class="blue">public</span> <span class="blue">var</span> Revealed:<span class="olive">Boolean</span>;
+
+<span class="green">// The grid and region information</span>
+<span class="blue">public</span> <span class="blue">var</span> X:int;
+<span class="blue">public</span> <span class="blue">var</span> Y:int;
+<span class="blue">public</span> <span class="blue">var</span> Region:int;
+<span class="blue">public</span> <span class="blue">var</span> RegionRowStart:int;
+<span class="blue">public</span> <span class="blue">var</span> RegionColStart:int;
+
+<span class="green">// The text fields</span>
+<span class="blue">private</span> <span class="blue">var</span> TextBox:<span class="olive">TextField</span>;
+<span class="blue">private</span> <span class="blue">var</span> ScratchBox:<span class="olive">TextField</span>;</pre>
+
+			<h2>Our methods</h2>
+			<p>For cells we have only a small number of simple methods that handle the behaviour of each cell.  Like the text formatting above, wherever possible we use a static method so that the single method is shared by all cells.</p>
+
+			<h3>The constructor</h3>
+			<p>This is the code that is run when we create an instance of a Cell.  In Sudoku.Game.Initialise we call this constructur 81 times to generate our cells.</p>
+
+			<pre><span class="blue">public</span> <span class="blue">function</span> Cell(x:int, y:int)
+{
+        <span class="green">// Set up our cell</span>
+        <span class="olive">this</span>.Answer = 0;
+        <span class="olive">this</span>.Revealed = <span class="blue">false</span>;
+        <span class="olive">this</span>.X = x;
+        <span class="olive">this</span>.Y = y;
+
+        <span class="green">// Set up the main text field</span>
+        <span class="olive">this</span>.TextBox = <span class="blue">new</span> <span class="olive">TextField</span>();
+        <span class="olive">this</span>.TextBox.<span class="olive">maxChars</span> = 1;
+        <span class="olive">this</span>.TextBox.<span class="olive">type</span> = "<span class="magenta">input</span>";
+        <span class="olive">this</span>.TextBox.x = (x * 50);
+        <span class="olive">this</span>.TextBox.y = 7 + (y * 50);
+        <span class="olive">this</span>.TextBox.<span class="olive">multiline</span> = <span class="blue">false</span>;
+        <span class="olive">this</span>.TextBox.<span class="olive">width</span> = 49;
+        <span class="olive">this</span>.TextBox.<span class="olive">height</span> = 30;
+        <span class="olive">this</span>.TextBox.defaultTextFormat = AnswerFormat;
+        <span class="olive">this</span>.TextBox.<span class="olive">addEventListener</span>(KeyboardEvent.KEY_UP, ValueChanged);
+        <span class="olive">this</span>.TextBox.<span class="olive">addEventListener</span>(FocusEvent.FOCUS_IN, <span class="olive">this</span>.Highlight);
+        <span class="olive">this</span>.TextBox.<span class="olive">addEventListener</span>(FocusEvent.FOCUS_OUT, UnHighlight);
+
+        <span class="green">// Set up the 'scratch' text field which is for notes</span>
+        <span class="olive">this</span>.ScratchBox = <span class="blue">new</span> <span class="olive">TextField</span>();
+        <span class="olive">this</span>.ScratchBox.<span class="olive">maxChars</span> = 9;
+        <span class="olive">this</span>.ScratchBox.<span class="olive">type</span> = "<span class="magenta">input</span>";
+        <span class="olive">this</span>.ScratchBox.x = (x * 50);
+        <span class="olive">this</span>.ScratchBox.y = 7 + (y * 50) + 28;
+        <span class="olive">this</span>.ScratchBox.defaultTextFormat = ScratchFormat;
+        <span class="olive">this</span>.ScratchBox.<span class="olive">height</span> = 15;
+        <span class="olive">this</span>.ScratchBox.<span class="olive">addEventListener</span>(FocusEvent.FOCUS_IN, <span class="olive">this</span>.Highlight);
+        <span class="olive">this</span>.ScratchBox.<span class="olive">addEventListener</span>(FocusEvent.FOCUS_OUT, UnHighlight);
+
+        Game.CellHolder.addChild(<span class="olive">this</span>.TextBox);
+        Game.CellHolder.addChild(<span class="olive">this</span>.ScratchBox);
+
+        <span class="green">// Work out what region this cell is in</span>
+        <span class="blue">if</span>(y &lt; 3) <span class="green">// Region 1, 2 or 3</span>
+        {
+                <span class="blue">if</span>(x &lt; 3)
+                {
+                        <span class="olive">this</span>.Region = 1;
+                        <span class="olive">this</span>.RegionRowStart = 0;
+                        <span class="olive">this</span>.RegionColStart = 0;
+                }
+                <span class="blue">else</span> <span class="blue">if</span>(x &gt;= 3 &amp;&amp; x &lt; 6)
+                {
+                        <span class="olive">this</span>.Region = 2;
+                        <span class="olive">this</span>.RegionRowStart = 3;
+                        <span class="olive">this</span>.RegionColStart = 0;
+                }
+                <span class="blue">else</span> <span class="blue">if</span>(x &gt;= 6)
+                {
+                        <span class="olive">this</span>.Region = 3;
+                        <span class="olive">this</span>.RegionRowStart = 6;
+                        <span class="olive">this</span>.RegionColStart = 0;
+                }
+        }
+        <span class="blue">else</span> <span class="blue">if</span>(y &gt;= 3 &amp;&amp; y &lt; 6) <span class="green">// Region 4, 5 or 6</span>
+        {
+                <span class="blue">if</span>(x &lt; 3)
+                {
+                        <span class="olive">this</span>.Region = 4;
+                        <span class="olive">this</span>.RegionRowStart = 0;
+                        <span class="olive">this</span>.RegionColStart = 3;
+                }
+                <span class="blue">else</span> <span class="blue">if</span>(x &gt;= 3 &amp;&amp; x &lt; 6)
+                {
+                        <span class="olive">this</span>.Region = 5;
+                        <span class="olive">this</span>.RegionRowStart = 3;
+                        <span class="olive">this</span>.RegionColStart = 3;
+                }
+                <span class="blue">else</span> <span class="blue">if</span>(x &gt;= 6)
+                {
+                        <span class="olive">this</span>.Region = 6;
+                        <span class="olive">this</span>.RegionRowStart = 6;
+                        <span class="olive">this</span>.RegionColStart = 3;
+                }
+        }
+        <span class="blue">else</span> <span class="blue">if</span>(y &gt;= 6) <span class="green">// Region 7, 8 or 9</span>
+        {
+                <span class="blue">if</span>(x &lt; 3)
+                {
+                        <span class="olive">this</span>.Region = 7;
+                        <span class="olive">this</span>.RegionRowStart = 0;
+                        <span class="olive">this</span>.RegionColStart = 6;
+                }
+                <span class="blue">else</span> <span class="blue">if</span>(x &gt;= 3 &amp;&amp; x &lt; 6)
+                {
+                        <span class="olive">this</span>.Region = 8;
+                        <span class="olive">this</span>.RegionRowStart = 3;
+                        <span class="olive">this</span>.RegionColStart = 6;
+                }
+                <span class="blue">else</span> <span class="blue">if</span>(x &gt;= 6)
+                {
+                        <span class="olive">this</span>.Region = 9;
+                        <span class="olive">this</span>.RegionRowStart = 6;
+                        <span class="olive">this</span>.RegionColStart = 6;
+                }
+        }
+}</pre>
+
+			<h3>Highlight and unhighlighting cells</h3>
+			<p>When a user clicks on or tabs to a cell we want to show that they're on that cell.  For that reason in the constructor above we added event listeners for FOCUS_IN and FOCUS_OUT.  These methods are called when the cell is focused.</p>
+
+			<p>Our highlight method first makes sure that the cell hasn't been revealed by the game.  If it has we don't want the user to be able to click on it and write.  Then is positions the Highlighter rectangle we drew in Game.as over the cell and sets it to be visible.</p>
+			<pre><span class="blue">private</span> <span class="blue">function</span> Highlight(e:<span class="olive">Object</span>):<span class="blue">void</span>
+{
+        <span class="blue">if</span>(<span class="olive">this</span>.Revealed == <span class="blue">true</span>)
+        {
+                Game.Highlighter.<span class="olive">visible</span> = <span class="blue">false</span>;
+                <span class="blue">return</span>;
+        }
+
+        Game.Highlighter.x = 11 + (<span class="olive">this</span>.X * 50);
+        Game.Highlighter.y = 51 + (<span class="olive">this</span>.Y * 50);
+        Game.Highlighter.<span class="olive">visible</span> = <span class="blue">true</span>;
+}</pre>
+
+			<p>The UnHighlight method simply hides the Highlighter rectangle:</p>
+
+			<pre><span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> UnHighlight(e:FocusEvent):<span class="blue">void</span>
+{
+        Game.Highlighter.<span class="olive">visible</span> = <span class="blue">false</span>;
+}</pre>
+
+			<h3>When the user enters a number</h3>
+			<p>Each time the user types a number in a cell we need to check if they've completed the game.  To do that we use our ValueChanged method:</p>
+
+			<pre><span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> ValueChanged(e:KeyboardEvent):<span class="blue">void</span>
+{
+        Game.CheckWin();
+}</pre>
+
+			<h3>Resetting cells</h3>
+			<p>When a new game is begun we have to reset each cell back to its default blank, enabled state.</p>
+
+			<pre><span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> Reset(cell:Cell):<span class="blue">void</span>
+{
+        cell.Answer = 0;
+        cell.Revealed = <span class="blue">false</span>;
+
+        cell.TextBox.<span class="olive">type</span> = "<span class="magenta">input</span>";
+        cell.TextBox.<span class="olive">selectable</span> = <span class="blue">true</span>;
+        cell.TextBox.<span class="olive">text</span> = "<span class="magenta"></span>";
+        cell.TextBox.setTextFormat(cell.TextBox.defaultTextFormat);
+
+        cell.ScratchBox.<span class="olive">text</span> = "<span class="magenta"></span>";
+        cell.ScratchBox.<span class="olive">selectable</span> = <span class="blue">true</span>;
+}</pre>
+
+			<h3>Revealing an answer</h3>
+			<p>When the game initialises 28 answers are revealed.  Each time a user clicks the Hint button an answer is revealed as well.  This is done using our ShowAnswer method.</p>
+
+			<pre><span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> ShowAnswer(cell:Cell):<span class="blue">void</span>
+{
+        cell.Revealed = <span class="blue">true</span>;
+
+        cell.TextBox.<span class="olive">type</span> = "<span class="magenta">dynamic</span>";
+        cell.TextBox.<span class="olive">selectable</span> = <span class="blue">false</span>;
+        cell.TextBox.<span class="olive">text</span> = <span class="olive">String</span>(cell.Answer);
+        cell.TextBox.setTextFormat(HintFormat);
+
+        cell.ScratchBox.<span class="olive">text</span> = "<span class="magenta"></span>";
+        cell.ScratchBox.<span class="olive">selectable</span> = <span class="blue">false</span>;
+}</pre>
+
+			<h3>Getting an answer</h3>
+			<p>Our final method retrieves the answer from the cell, whether the user has specified it or the game has revealed it:</p>
+
+			<pre><span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> GetAnswer(cell:Cell):<span class="olive">String</span>
+{
+        <span class="blue">if</span>(cell.Revealed)
+        {
+                <span class="blue">return</span> <span class="olive">String</span>(cell.Answer);
+        }
+        <span class="blue">else</span>
+        {
+                <span class="blue">return</span> cell.TextBox.<span class="olive">text</span>;
+        }
+}</pre>
+
+			<p>Again, this is a lot of code to digest and it might be easier and make more sense by checking the <a href="/sudoku/source/Cell.as.aspx">source file</a> in it's entirety.</p>
+
+			<p>The good news is that's all of the code, and if you've made it this far you should have a complete Sudoku game!</p>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/sudoku/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/sudoku/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/sudoku/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/sudoku/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/sudoku/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/sudoku/source/sudoku.zip">Download the complete source</a></li>
+			</ul>
+
+
+		</div>
+
+	<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+</div>
+
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

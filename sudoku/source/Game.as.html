@@ -1,0 +1,530 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Source: Game.as | Learn how to make Sudoku in Flash ~ InFlash Studios</title>
+    <style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+			
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Sudoku in Flash</h1>
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/sudoku/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/sudoku/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/sudoku/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/sudoku/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/sudoku/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/sudoku/source/sudoku.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Source: Game.as</h1>
+
+			<pre>package Sudoku
+{
+        <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">display</span>.<span class="olive">MovieClip</span>;
+        <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">display</span>.SimpleButton;
+        <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">display</span>.Shape;
+        <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">display</span>.<span class="olive">Stage</span>;
+        <span class="blue">import</span> <span class="olive">flash</span>.events.MouseEvent;
+        <span class="blue">import</span> <span class="olive">flash</span>.events.Event;
+
+        <span class="blue">public</span> <span class="blue">class</span> Game <span class="blue">extends</span> <span class="olive">MovieClip</span>
+        {
+                <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> STAGE:<span class="olive">Stage</span>;
+                <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> Playing:<span class="olive">Boolean</span>;
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> Grid:<span class="olive">Array</span>;
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> GridCells:<span class="olive">Array</span>;
+                <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> CellHolder:<span class="olive">MovieClip</span>;
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> WinDialogue:Sudoku.WinDialogue;
+                <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> Highlighter:Shape;
+
+                <span class="blue">public</span> <span class="blue">function</span> Game()
+                {
+                        STAGE = <span class="olive">this</span>.stage;
+                        loaderInfo.<span class="olive">addEventListener</span>(Event.COMPLETE, Initialise);
+                }
+
+                <span class="blue">private</span> <span class="blue">function</span> Initialise(e:Event):<span class="blue">void</span>
+                {
+                        <span class="green">// Set up our button click handlers</span>
+                        <span class="olive">this</span>.NewGameButton.<span class="olive">addEventListener</span>(MouseEvent.MOUSE_UP, NewGame);
+                        <span class="olive">this</span>.HintButton.<span class="olive">addEventListener</span>(MouseEvent.MOUSE_UP, Hint);
+                        <span class="olive">this</span>.SolveButton.<span class="olive">addEventListener</span>(MouseEvent.MOUSE_UP, Solve);
+
+                        <span class="green">// Create the container movieclip for our cells</span>
+                        CellHolder = <span class="blue">new</span> <span class="olive">MovieClip</span>();
+                        CellHolder.x = 10;
+                        CellHolder.y = 50;
+                        addChild(CellHolder);
+
+                        <span class="green">// Initialise our grid of cells</span>
+                        Grid = <span class="blue">new</span> <span class="olive">Array</span>(9);
+                        GridCells = <span class="blue">new</span> <span class="olive">Array</span>(81);
+
+                        <span class="blue">var</span> gindex:int = 0;
+                        <span class="blue">var</span> cell:Cell;
+
+                        <span class="blue">for</span>(<span class="blue">var</span> x:int=0; x&lt;9; x++)
+                        {
+                                Grid[x] = <span class="blue">new</span> <span class="olive">Array</span>(9);
+
+                                <span class="blue">for</span>(<span class="blue">var</span> y:int=0; y&lt;9; y++)
+                                {
+                                        cell = <span class="blue">new</span> Cell(x, y);
+                                        Grid[x][y] = cell;
+                                        GridCells[gindex] = cell;
+                                        gindex++;
+                                }
+                        }
+
+                        <span class="green">// Create our highlighter to indicate which cell is being edited</span>
+                        Highlighter = <span class="blue">new</span> Shape();
+                        Highlighter.graphics.<span class="olive">lineStyle</span>(0.1, 0x999999);
+                        Highlighter.graphics.<span class="olive">moveTo</span>(0, 0);
+                        Highlighter.graphics.<span class="olive">lineTo</span>(0, 47);
+                        Highlighter.graphics.<span class="olive">lineTo</span>(47, 47);
+                        Highlighter.graphics.<span class="olive">lineTo</span>(47, 0);
+                        Highlighter.graphics.<span class="olive">lineTo</span>(0, 0);
+                        Highlighter.graphics.<span class="olive">endFill</span>();
+                        Highlighter.<span class="olive">visible</span> = <span class="blue">false</span>;
+                        STAGE.addChild(Highlighter);
+
+                        <span class="green">// Create our win dialogue and hide it for later</span>
+                        WinDialogue = <span class="blue">new</span> Sudoku.WinDialogue();
+                        WinDialogue.x = 10;
+                        WinDialogue.y = 239;
+                        WinDialogue.<span class="olive">visible</span> = <span class="blue">false</span>;
+                        STAGE.addChild(WinDialogue);
+
+
+                        NewGame();
+                }
+
+                <span class="green">// Starts a new game</span>
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> NewGame(e:MouseEvent = <span class="blue">null</span>):<span class="blue">void</span>
+                {
+                        <span class="green">// Reset the grid</span>
+                        ResetGrid();
+
+                        <span class="green">// Create a puzzle</span>
+                        GeneratePuzzle();
+
+                        <span class="green">// Hide the win dialogue if it's visible</span>
+                        WinDialogue.<span class="olive">visible</span> = <span class="blue">false</span>;
+
+                        <span class="blue">var</span> revealed:int = 28;
+
+                        <span class="blue">while</span>(revealed &gt; 0)
+                        {
+                                <span class="blue">var</span> y = Random(0, 8);
+                                <span class="blue">var</span> x = Random(0, 8);
+
+                                <span class="blue">if</span>(Grid[y][x].Revealed == <span class="blue">false</span>)
+                                {
+                                        Grid[y][x].Revealed = <span class="blue">true</span>;
+                                        Cell.ShowAnswer(Grid[y][x]);
+                                        revealed--;
+                                }
+                        }
+
+                        <span class="green">// Set the status  to playing</span>
+                        Playing = <span class="blue">true</span>;
+                }
+
+                <span class="green">// Generates a Sudoku solution</span>
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> GeneratePuzzle():<span class="blue">void</span>
+                {
+                        <span class="blue">var</span> index:int = 0;
+
+                        <span class="blue">while</span>(index &lt; 81)
+                        {
+                                <span class="blue">var</span> number:int = 0;
+                                <span class="blue">var</span> values:<span class="olive">Array</span> = [1,2,3,4,5,6,7,8,9];
+
+                                <span class="blue">while</span>(values.<span class="olive">length</span> &gt; 0 &amp;&amp; number == 0)
+                                {
+                                        <span class="blue">var</span> zindex:int = Random(0, values.<span class="olive">length</span>);
+                                        <span class="blue">var</span> z:int = values[zindex];
+                                        values.<span class="olive">splice</span>(zindex, 1);
+
+                                        <span class="blue">if</span>(!Conflicts(z, GridCells[index]))
+                                        {
+                                                number = z;
+                                        }
+                                }
+
+                                <span class="blue">if</span>(number == 0)
+                                {
+                                        <span class="blue">var</span> maxbacktrack:int = index &gt; 10 ? 10 : index;
+                                        <span class="blue">var</span> backtrack:int = Random(1, maxbacktrack);
+                                        <span class="blue">var</span> backtracked:int = 0;
+
+                                        <span class="blue">while</span>(backtracked &lt; backtrack)
+                                        {
+                                                GridCells[index - backtracked].Answer = 0;
+                                                backtracked++;
+                                        }
+
+                                        index -= backtrack;
+                                }
+                                <span class="blue">else</span>
+                                {
+                                        GridCells[index].Answer = number;
+                                        index++;
+                                }
+                        }
+                }
+
+                <span class="green">// Resets the grid to it's original state</span>
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> ResetGrid():<span class="blue">void</span>
+                {
+                        <span class="green">// Go through each cell</span>
+                        <span class="blue">for</span>(<span class="blue">var</span> i:int=0; i&lt;81; i++)
+                        {
+                                <span class="green">// Reset it</span>
+                                Cell.Reset(GridCells[i]);
+                        }
+                }
+
+                <span class="green">// Checks if there are any available cells</span>
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> AvailableCells():<span class="olive">Boolean</span>
+                {
+                        <span class="green">// Go through each cell</span>
+                        <span class="blue">for</span>(<span class="blue">var</span> i:int=0; i&lt;81; i++)
+                        {
+                                <span class="green">// Check if it's empty</span>
+                                <span class="blue">if</span>(Cell.GetAnswer(GridCells[i]) == "<span class="magenta"></span>")
+                                {
+                                        <span class="blue">return</span> <span class="blue">true</span>;
+                                }
+                        }
+
+                        <span class="blue">return</span> <span class="blue">false</span>;
+                }
+
+                <span class="green">// Check if there is a conflict between a cell and the row, column and</span>
+                <span class="green">// region it's on</span>
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> Conflicts(number:int, cell:Sudoku.Cell):<span class="olive">Boolean</span>
+                {
+                        <span class="green">// Check the rows and columns</span>
+                        <span class="blue">for</span>(<span class="blue">var</span> i:int=0; i&lt;9; i++)
+                        {
+                                <span class="blue">if</span>(Grid[cell.X][i].Answer == number || Grid[i][cell.Y].Answer == number)
+                                {
+                                        <span class="blue">return</span> <span class="blue">true</span>;
+                                }
+                        }
+
+                        <span class="green">// Check the region it's in</span>
+                        <span class="blue">for</span>(<span class="blue">var</span> x:int=cell.RegionRowStart; x&lt;cell.RegionRowStart+3; x++)
+                        {
+                                <span class="blue">for</span>(<span class="blue">var</span> y:int=cell.RegionColStart; y&lt;cell.RegionColStart+3; y++)
+                                {
+                                        <span class="blue">if</span>(Grid[x][y].Answer == number)
+                                        {
+                                                <span class="blue">return</span> <span class="blue">true</span>;
+                                        }
+                                }
+                        }
+
+                        <span class="blue">return</span> <span class="blue">false</span>;
+                }
+
+                <span class="green">// Generates a random number between min and max inclusive</span>
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> Random(<span class="olive">min</span>:int, <span class="olive">max</span>:int):int
+                {
+                        <span class="blue">var</span> number:int = <span class="olive">min</span> - 1;
+
+                        <span class="blue">while</span>(number &lt; <span class="olive">min</span> || number &gt; <span class="olive">max</span>)
+                        {
+                                number = <span class="olive">min</span> + <span class="olive">Math</span>.<span class="olive">round</span>(<span class="olive">Math</span>.<span class="olive">random</span>() * (<span class="olive">max</span> - <span class="olive">min</span>));
+                        }
+
+                        <span class="blue">return</span> number;
+                }
+
+                <span class="green">// Reveals one correct answer for the player</span>
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> Hint(e:MouseEvent):<span class="blue">void</span>
+                {
+                        <span class="blue">if</span>(!Playing)
+                        <span class="blue">return</span>;
+
+                        <span class="blue">if</span>(AvailableCells() == <span class="blue">false</span>)
+                        <span class="blue">return</span>;
+
+                        <span class="green">// Because we're not sure which cell to reveal we have to</span>
+                        <span class="green">// keep doing this till we find one</span>
+                        <span class="blue">var</span> done:<span class="olive">Boolean</span> = <span class="blue">false</span>;
+                        <span class="blue">var</span> cell:Cell;
+
+                        <span class="blue">while</span>(!done)
+                        {
+                                <span class="green">// Select a random cell</span>
+                                <span class="blue">var</span> row:int = Random(0, 8);
+                                <span class="blue">var</span> column:int = Random(0, 8);
+                                cell = Grid[row][column];
+
+                                <span class="green">// If it's not revealed then we do so</span>
+                                <span class="blue">if</span>(cell.Revealed == <span class="blue">false</span>)
+                                {
+                                        Cell.ShowAnswer(cell);
+
+                                        <span class="green">// Check if the game's over now</span>
+                                        CheckWin();
+
+                                        <span class="blue">return</span>;
+                                }
+                        }
+                }
+
+                <span class="green">// Checks if all cells have been correctly filled out</span>
+                <span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> CheckWin():<span class="blue">void</span>
+                {
+                        <span class="green">// Don't check if there are any empty cells</span>
+                        <span class="blue">if</span>(AvailableCells() == <span class="blue">true</span>)
+                        <span class="blue">return</span>;
+
+                        <span class="green">// Check the rows and columns</span>
+                        <span class="blue">var</span> rowcell:Cell;
+                        <span class="blue">var</span> rowanswer:<span class="olive">String</span>;
+                        <span class="blue">var</span> rowanswers:<span class="olive">String</span>;
+                        <span class="blue">var</span> colcell:Cell;
+                        <span class="blue">var</span> colanswer:<span class="olive">String</span>;
+                        <span class="blue">var</span> colanswers:<span class="olive">String</span>;
+
+                        <span class="blue">for</span>(<span class="blue">var</span> i:int=0; i&lt;9; i++)
+                        {
+                                rowanswers = "<span class="magenta"></span>";
+                                colanswers = "<span class="magenta"></span>";
+
+                                <span class="blue">for</span>(<span class="blue">var</span> j=0; j&lt;9; j++)
+                                {
+                                        rowcell = Grid[i][j];
+                                        colcell = Grid[j][i];
+
+                                        <span class="green">// Check the row answer, if it's blank or already been</span>
+                                        <span class="green">// entered we can return</span>
+                                        rowanswer = Cell.GetAnswer(rowcell);
+
+                                        <span class="blue">if</span>(rowanswer == "<span class="magenta"></span>" || rowanswers.<span class="olive">indexOf</span>(rowanswer) &gt; -1)
+                                        <span class="blue">return</span>;
+
+                                        <span class="green">// Check the column answer</span>
+                                        colanswer = Cell.GetAnswer(colcell);
+
+                                        <span class="blue">if</span>(colanswer == "<span class="magenta"></span>" || colanswers.<span class="olive">indexOf</span>(colanswer) &gt; -1)
+                                        <span class="blue">return</span>;
+
+                                        <span class="green">// Append these answers to our check lists</span>
+                                        rowanswers += rowanswer;
+                                        colanswers += colanswer;
+                                }
+                        }
+
+                        <span class="green">// Check the regions</span>
+                        <span class="blue">var</span> regionanswers:<span class="olive">String</span>;
+                        <span class="blue">var</span> regionanswer:<span class="olive">String</span>;
+                        <span class="blue">var</span> rowstart:int = 0;
+                        <span class="blue">var</span> colstart:int = 0;
+
+                        <span class="blue">for</span>(<span class="blue">var</span> k:int=1; k&lt;10; k++)
+                        {
+                                <span class="green">// Work out what the x/y coordinates of the region we're in begin at</span>
+                                <span class="blue">switch</span>(k)
+                                {
+                                        <span class="blue">case</span> 1:
+                                        rowstart = 0;
+                                        colstart = 0;
+                                        <span class="blue">break</span>;
+
+                                        <span class="blue">case</span> 2:
+                                        rowstart = 3;
+                                        colstart = 0;
+                                        <span class="blue">break</span>;
+
+                                        <span class="blue">case</span> 3:
+                                        rowstart = 6;
+                                        colstart = 0;
+                                        <span class="blue">break</span>;
+
+                                        <span class="blue">case</span> 4:
+                                        rowstart = 0;
+                                        colstart = 3;
+                                        <span class="blue">break</span>;
+
+                                        <span class="blue">case</span> 5:
+                                        rowstart = 3;
+                                        colstart = 3;
+                                        <span class="blue">break</span>;
+
+                                        <span class="blue">case</span> 6:
+                                        rowstart = 6;
+                                        colstart = 3;
+                                        <span class="blue">break</span>;
+
+                                        <span class="blue">case</span> 7:
+                                        rowstart = 0;
+                                        colstart = 6;
+                                        <span class="blue">break</span>;
+
+                                        <span class="blue">case</span> 8:
+                                        rowstart = 3;
+                                        colstart = 6;
+                                        <span class="blue">break</span>;
+
+                                        <span class="blue">case</span> 9:
+                                        rowstart = 6;
+                                        colstart = 6;
+                                        <span class="blue">break</span>;
+                                }
+
+                                <span class="green">// Check each cell in this region</span>
+                                regionanswers = "<span class="magenta"></span>";
+
+                                <span class="blue">for</span>(<span class="blue">var</span> x:int=rowstart; x&lt;rowstart+3; x++)
+                                {
+                                        <span class="blue">for</span>(<span class="blue">var</span> y:int=colstart; y&lt;colstart+3; y++)
+                                        {
+                                                rowcell = Grid[x][y];
+
+                                                regionanswer = Cell.GetAnswer(rowcell);
+
+                                                <span class="green">// If there's no answer</span>
+                                                <span class="blue">if</span>(regionanswer == "<span class="magenta"></span>" || regionanswers.<span class="olive">indexOf</span>(regionanswer) &gt; -1)
+                                                <span class="blue">return</span>;
+
+                                                <span class="green">// Append the answer to our check list</span>
+                                                regionanswers += regionanswer;
+                                        }
+                                }
+                        }
+
+                        Playing = <span class="blue">false</span>;
+                        WinDialogue.<span class="olive">visible</span> = <span class="blue">true</span>;
+                        STAGE.setChildIndex(WinDialogue, STAGE.numChildren - 1);
+                }
+
+                <span class="green">// Solves the puzzle</span>
+                <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> Solve(e:MouseEvent):<span class="blue">void</span>
+                {
+                        <span class="blue">if</span>(!Playing)
+                        <span class="blue">return</span>;
+
+                        <span class="green">// We're not playing any more</span>
+                        Playing = <span class="blue">false</span>;
+
+                        <span class="green">// Go through each cell and show the answer</span>
+                        <span class="blue">for</span>(<span class="blue">var</span> i:int=0; i&lt;81; i++)
+                        {
+                                <span class="blue">if</span>(GridCells[i].Revealed == <span class="blue">false</span>)
+                                {
+                                        Cell.ShowAnswer(GridCells[i]);
+                                }
+                        }
+                }
+        }
+}</pre>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/sudoku/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/sudoku/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/sudoku/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/sudoku/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/sudoku/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/sudoku/source/sudoku.zip">Download the complete source</a></li>
+			</ul>
+
+		</div>
+
+	<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+</div>
+
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

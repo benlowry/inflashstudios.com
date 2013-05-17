@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Part 1: Understanding the game and setting up our FLA | Learn how to make Minesweeper in Flash ~ InFlash Studios</title>
+	<style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Minesweeper in Flash</h1>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/minesweeper/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/minesweeper/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/minesweeper/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/minesweeper/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/minesweeper/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/minesweeper/source/Coordinates.as.html">Source: Coordinates.as</a></li>
+				<li><a href="/minesweeper/source/minesweeper.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Part 1: Understanding the game and setting up our FLA</h1>
+
+			<h2>Introduction</h2>
+			<p>There's probably not a lot that needs to be said about Minesweeper, we've all played it a thousand times or more since it's on pretty much every computer.  It consists of a grid, each cell may or may not contain a mine, if it does not contain a mine then it may be blank or it may have X adjacent mines.</p>
+
+			<h2>Setting up our Flash file</h2>
+			<p>As with <a href="/sudoku/tutorial.aspx">Sudoku</a>, we're going to use a hybrid of creating elements on our stage and programmatically through ActionScript.  Our presentation is going to use 2 different layers.  The background and the interface components.</p>
+
+			<div class="image">
+				<img src="/minesweeper/images/minesweeper-fla-setup.jpg" alt="Setting up your Minesweeper FLA" />
+				The structure of our FLA
+			</div>
+
+			<p>Remember to name your layers, you will thank yourself if you ever have to come back to an old FLA.</p>
+
+			<h3>The background</h3>
+			<p>The background is just a drawn "rectangle primitive" with some curvature applied to it.</p>
+			
+			<div class="image">
+				<img src="/minesweeper/images/minesweeper-background-1.jpg" alt="Selecting the primitive rectangle tool in Flash" />
+				Selecting the rectangle primitive tool in Flash
+			</div>
+
+			<div class="image">
+				<img src="/minesweeper/images/minesweeper-background-2.jpg" alt="Adjusting the rectangle primitive properties to add curvature" />
+				Adjusting the rectangle primitive properties to add curvature
+			</div>
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+
+
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h3>The interface</h3>
+			<p>These are the actual buttons within the game that people are going to click on.  There are three buttons, Easy, Medium and Hard.</p>
+			<p>To create a button in Flash select the Text tool, click somewhere on the stage (make sure you select our Interface layer), write the button text, select the Pointer tool so the text is committed to the stage and then press F8.</p>
+			
+			<div class="image">
+				<img src="/minesweeper/images/creating-a-button.jpg" alt="Creating a button in Flash" />
+				Creating a button
+			</div>
+
+			<p>Give each button a meaningful name so you can find them easily in the Library and make sure you assign an <em>instance name</em> to the button on the stage.  You do this by selecting the button and then in the Properties dialogue entering text in the &lt;Instance Name&gt; textfield.</p>
+
+			<div class="image">
+				<img src="/minesweeper/images/instance-name.jpg" alt="Assigning an instance name in Flash" />
+				Assigning an instance name
+			</div>
+
+			<p>This is a very important step because the instance name allows us to access the button from our code.</p>
+			
+			<h3>Our win dialogue</h3>
+			<p>When the player has won the game we want to display a message saying so.  To do this we create a movieclip (created the same way as buttons) called WinDialogue.  There's one significant difference to the buttons though, we're sharing this asset with the code so it can be programatically created.</p>
+
+			<div class="image">
+				<img src="/minesweeper/images/win-notice.jpg" alt="Our win dialogue's properties" />
+				The win dialogue's properties
+			</div>
+			
+			<p>Once you have done all of this you're ready to <a href="/minesweeper/tutorial-2.aspx">start coding the game</a>.</p>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/minesweeper/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/minesweeper/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/minesweeper/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/minesweeper/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/minesweeper/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/minesweeper/source/Coordinates.as.html">Source: Coordinates.as</a></li>
+				<li><a href="/minesweeper/source/minesweeper.zip">Download the complete source</a></li>
+			</ul>
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

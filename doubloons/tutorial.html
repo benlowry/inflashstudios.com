@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Part 1: Understanding the game and setting up our FLA | Learn how to make Bloons in Flash ~ InFlash Studios</title>
+	<style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Bloons in Flash</h1>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Part 1: Understanding the game and setting up our FLA</h1>
+
+			<h2>Introduction</h2>
+			<p><a href="/doubloons/default.aspx">Doubloons</a> is a very simple game that is closely related to Bloons.  The goal is simply to angle and power each shot to collect the coins, and when you reach the required number of coins you proceed to the next level.  If you run out of shots you restart that level.</p>
+			<p>Although the gameplay is simple there are a lot of different parts we need to discuss that are all closely related so make sure you grab a copy of the source to work with as you read the tutorial.</p>
+
+			<h2>Setting up our Flash file</h2>
+			<p>As with <a href="/sudoku/tutorial.aspx">Sudoku</a> and <a href="/minesweeper/tutorial.aspx">Minesweeper</a> we're going to use a hybrid of creating elements on our stage and programmatically through ActionScript.  This time round though we're dealing with a more complicated game which requires a bit more work setting up the FLA.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/doubloons-fla.jpg" alt="Setting up your Doubloons FLA" />
+				The structure of our FLA
+			</div>
+
+			<p>Remember to name your layers, you will thank yourself if you ever have to come back to an old FLA.</p>
+
+			<h3>The sky</h3>
+			<p>The sky is just a drawn rectangle with a gradient fill going from dark blue to light blue.  It is sized the same as our stage (550x400)</p>
+
+			<div class="image">
+				<img src="/doubloons/images/sky.jpg" alt="Setting up the sky" />
+				Our sky rectangle
+			</div>			
+
+			<h3>The ship and water</h3>
+			<p>The ship is a piece of vector art turned into a movieclip.  It doesn't move and isn't interactive, it just sits there.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/ship.jpg" alt="Setting up the ship" />
+				The ship
+			</div>
+
+			<p>The water also goes in the ship's layer.  We have 3 'pieces' of water that are slid back and forth to make something representative of waves.  Each piece is a 700x40 pixel transparent PNG.  Behind the 3 pieces we move around is just a solid blue rectangle that gives us a constant 'minimum' for the water.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/water.jpg" alt="Setting up the water" />
+				The 3 water movieclips with the solid blue background behind them
+			</div>
+
+			<p>The 3 movable pieces of water should be inside MovieClips with instance names Water1, Water2 and Water 3.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/water2-clip.jpg" alt="Setting up the water part 2" />
+				Water2, an instance of ... Water2!
+			</div>
+
+			<p>The final component of the ship layer is the cannon and cannonball.  The cannon consists of two parts, one is the base which is a part of the ship graphic, the other is the barrel which is a movieclip we can rotate to follow the mouse.  One important and not-visible part of the cannon is we have a secret movieclip inside it that is the Firing Point.  This is the point where the cannonball will begin its flight, and it goes inside the cannon so it moves as the cannon rotates.  You can see it's the selected movieclip in this graphic.</p>
+			<p>The cannonball does not go inside the cannon movieclip!</p>
+
+			<div class="image">
+				<img src="/doubloons/images/cannon.jpg" alt="Setting up the water part 2" />
+				Our cannon, its firing point, and the cannonball.
+			</div>			
+
+			<h2>The other bits</h2>
+			<p>In the "miscellaneous" layer we're stuffing all the other odds and ends ... the reset and sound buttons, our statusbar, and the fire power meter.</p>
+
+			<h3>The sound and restart buttons</h3>
+			<p>The sound and restart buttons are just SimpleButtons each with one frame made from an image.  To make them you just drag an image onto the stage, hit F8 and put a name and select button from the options.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/soundbutton.jpg" alt="Setting up the sound button" />
+				The sound button
+			</div>			
+
+			<h3>The firing power</h3>
+			<p>This is a slightly more complicated element, it uses a Mask to create a circle shape we can fill in.  To create the mask you draw a circle and then right click on the layer in the timeline bar and select Mask.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/firingpower.jpg" alt="Setting up the fire power clip" />
+				The fire power movieclip
+			</div>	
+
+			<p>We use the mask because as the firepower increases or decreases we are filling in a circle, except we're not really filling in a circle we're adjusting the height and y position of a rectangle which is masked <em>by</em> the circle.</p>
+
+			<h3>The status bar</h3>
+			<p>The status bar provides us our in-game information elements, how many shots we have left, how many coins we have collected, what level we're on to etcetera.  Most of this is just text fields and symbols.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/statusbar.jpg" alt="The status bar" />
+				The status bar
+			</div>
+			
+			<p>Once you have done all of this you're ready to <a href="/doubloons/tutorial-2.aspx">start coding the game</a>.</p>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

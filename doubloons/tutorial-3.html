@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Part 3: Programming the scenery - clouds, water, seagulls | Learn how to make Bloons in Flash ~ InFlash Studios</title>
+	<style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Bloons in Flash</h1>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Part 3: Programming the scenery</h1>
+
+			<h2>Scenery</h2>
+			<p>These elements are non-interactive which means you don't "do" anything with them, but little bits of polish like this are a vital component of any successful game.</p>
+			<p>Each of these 3 components are controlled via very simple ActionScript.</p>
+
+			<h3>The water</h3>
+			<p>You might remember in the <a href="/doubloons/tutorial.aspx">setting up</a> part we had 3 movieclips that each held a water graphic, named Water1, Water2 and Water3.  We're now going to create a WaterManager that will be in charge of moving those 3 clips backwards and forwards to simulate some waves.</p>
+			<p>It is a very simple class:</p>
+
+<pre class="brush: actionscript3">package Doubloons
+{
+    import flash.display.MovieClip;
+    
+    public class WaterManager extends MovieClip
+    {
+        public var Pieces:Array;
+        
+        public function WaterManager() { }
+        
+        public function Tick():void
+        {
+            // Move each piece of the water around
+            for each(var water:MovieClip in this.Pieces)
+            {
+                water.x += water.Direction;
+                
+                if(water.x == 0 || water.x + water.width == 550)
+                {
+                    water.Direction = water.Direction == 1 ? -1 : 1;
+                }
+            }
+        }
+    }
+}</pre>
+
+			<p>Because we have just 3 pieces of water and only those 3 and they are located on the stage in our FLA we store them in the Pieces array from our main class.  We'll come back to that later.</p>
+
+			<h3>The clouds</h3>
+			<p>The clouds are easier because they are randomly attached and moved around.  First we create some clouds in our movie and link them:</p>
+
+			<div class="image">
+				<img src="/doubloons/images/clouds1.jpg" alt="The cloud clips" />
+				The cloud clips made from drawing a bunch of white circles/ovals over each other, then pressing F8 to create a MovieClip
+			</div>
+
+			<div class="image">
+				<img src="/doubloons/images/clouds2.jpg" alt="Linking them" />
+				The linked clips - Doubloons.CloudX - makes the clouds available from our AS3
+			</div>
+
+
+			<p>After the clouds set up we create a CloudManager class which handles spawning and moving clouds around on the screen.  There's a few lines but it's very simple code.</p>
+
+<pre class="brush: actionscript3">package Doubloons
+{
+    import flash.display.MovieClip;
+    
+    public class CloudManager extends MovieClip
+    {
+        private var NextCloud:int = 0; // our timer for spawning new clouds
+        
+        public function CloudManager() { }
+        
+        public function Tick():void
+        {
+            // Move the clouds around, we do this by going backwards
+            // through the 'children' of our Clouds clip and moving 
+            // each one then checking if it has left the stage.  
+            for(var i:int=this.numChildren-1; i>-1; i--)
+            {
+                var cloud:MovieClip = this.getChildAt(i) as MovieClip;
+                cloud.x -= 0.5;
+                
+                // check if it's off the stage
+                if(cloud.x + cloud.width < 0)
+                {
+                    // remove from the display and array
+                    cloud.parent.removeChild(cloud);
+                }           
+            }
+            
+            // Check if we can spawn another cloud
+            if(NextCloud == 0)
+            {               
+                // Create the cloud
+                var newcloud:MovieClip;
+                var rand:Number = Math.random();
+                
+                if(rand < 0.25)
+                    newcloud = new Doubloons.Cloud1();
+                else if(rand < 0.5)
+                    newcloud = new Doubloons.Cloud2();
+                else if(rand < 0.75)
+                    newcloud = new Doubloons.Cloud3();
+                else
+                    newcloud = new Doubloons.Cloud4();
+                
+                newcloud.x = 550;
+                newcloud.y = Math.random() * 200;
+                newcloud.scaleX = Math.random();
+                newcloud.scaleY = newcloud.scaleX;
+                
+                this.addChild(newcloud);
+                
+                NextCloud = Math.random() * 600;
+            }
+            else
+            {
+                NextCloud--;
+            }
+        }
+    }
+}</pre>
+
+			<h3>The seagulls</h3>
+			<p>The final "nice little touch" we're going to add is seagulls flying around on the screen.  This is handled almost exactly like the clouds.  First we get our seagull images and then we create our linked MovieClips, and finally a SeagullManager that handles them.</p>
+
+<pre class="brush: actionscript3">package Doubloons
+{
+	import flash.display.MovieClip;
+	
+	public class SeagullManager extends MovieClip
+	{
+		private var NextSeagull:int = 0; // our timer for spawning new seagulls
+		
+		public function SeagullManager() { }
+		
+		public function Tick():void
+		{
+			// Move the seagulls around, we do this by going backwards
+			// through the 'children' of our Seagulls clip and moving 
+			// each one then checking if it has left the stage.  
+			for(var i:int=this.numChildren-1; i>-1; i--)
+			{
+				var seagull:MovieClip = this.getChildAt(i) as MovieClip;
+				seagull.x += seagull.MoveX;
+				seagull.y += seagull.MoveY;
+				
+				// check if it's off the stage
+				// condition 1 = it's come off the left edge (x + width)
+				// condition 2 = it's come off the right edge (x)
+				// condition 3 = it's come off the top edge (y + height)
+				if(seagull.x + seagull.width < 0 || seagull.x > 550 || seagull.y + seagull.height < 0)
+				{
+					// remove from the display 
+					seagull.parent.removeChild(seagull);
+				}			
+			}
+			
+			// Check if we can spawn another seagull
+			if(NextSeagull == 0)
+			{				
+				// Create the seagull
+				var newseagull:MovieClip;
+				
+				if(Math.random() < 0.5)
+				{
+					// type one, moves up and to the right starting from the left edge
+					newseagull = new Doubloons.Seagull1();
+					newseagull.MoveX = 1 + Math.random();
+					newseagull.MoveY = -0.01;
+					newseagull.x = -newseagull.width;
+					newseagull.y = Math.random() * 350;
+				}
+				else
+				{
+					// type two, moves up and to the left starting from the right edge
+					newseagull = new Doubloons.Seagull2();
+					newseagull.MoveX = -1;
+					newseagull.MoveY = -0.01;
+					newseagull.x = 550;
+					newseagull.y = Math.random() * 350;					
+				}
+				
+				this.addChild(newseagull);
+				
+				NextSeagull = Math.random() * 360;
+			}
+			else
+			{
+				NextSeagull--;
+			}		
+		}
+	}
+}</pre>
+
+
+			
+			<p>Once you have done all of this you're ready to <a href="/doubloons/tutorial-3.aspx">the game screens, saving, and sound managers</a>.</p>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

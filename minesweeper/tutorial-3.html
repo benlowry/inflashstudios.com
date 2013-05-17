@@ -1,0 +1,391 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Part 3: Programming the cells | Learn how to make Minesweeper in Flash ~ InFlash Studios</title>
+	<style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Minesweeper in Flash</h1>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/minesweeper/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/minesweeper/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/minesweeper/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/minesweeper/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/minesweeper/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/minesweeper/source/Coordinates.as.html">Source: Coordinates.as</a></li>
+				<li><a href="/minesweeper/source/minesweeper.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Part 3: Programming the cells</h1>
+
+			<h2>Set up your file</h2>
+
+			<p>This file controls an actual cell in the game.  A cell consists of a movieclip that shows each 'state' of a cell, and a handful of methods and properties that control its behaviour.</p>
+
+			<p>In your Cell.as the first thing we need to do is set it up so that it is in the right package and class.</p>
+
+			<pre>package Minesweeper
+{
+    <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">display</span>.<span class="olive">MovieClip</span>;
+
+    <span class="blue">public</span> <span class="blue">class</span> Cell <span class="blue">extends</span> <span class="olive">MovieClip</span>
+    {
+    }
+}</pre>
+
+			<h2>Properties</h2>
+			<p>The text colors are going to be shared by all cells.  These are the colors when you have 1 - 8 adjacent mines, the number is blue, red, whatever.</p>
+
+			<pre><span class="blue">private</span> <span class="blue">static</span> const Colors:<span class="olive">Array</span> = <span class="blue">new</span> <span class="olive">Array</span>(9);
+Colors[1] = 0x0004FF;
+Colors[2] = 0x007000;
+Colors[3] = 0xFE0100;
+Colors[4] = 0x05006C;
+Colors[5] = 0x840800;
+Colors[6] = 0x008284;
+Colors[7] = 0x840084;
+Colors[8] = 0x000000;</pre>
+
+			<h3>Our cell-specific data</h3>
+			<p>Every cell has its own copy of this data.  As you can see it holds information regarding the state of the mine.</p>
+
+			<pre><span class="blue">private</span> <span class="blue">var</span> X:int;
+<span class="blue">private</span> <span class="blue">var</span> Y:int;
+<span class="blue">public</span> <span class="blue">var</span> Mined:<span class="olive">Boolean</span>;
+<span class="blue">public</span> <span class="blue">var</span> Flagged:<span class="olive">Boolean</span>;
+<span class="blue">private</span> <span class="blue">var</span> Questioned:<span class="olive">Boolean</span>;
+<span class="blue">public</span> <span class="blue">var</span> Ignore:<span class="olive">Boolean</span>;
+<span class="blue">public</span> <span class="blue">var</span> Adjacent:int;</pre>
+
+			<h2>Our methods</h2>
+			<p>The cell behaviour in Minesweeper is very simple so we only have a handful of methods.  These methods are mostly static which is more efficient when you have a lot of instances - 480 on Hard - that need to do the same things.</p>
+
+			<h3>The constructor</h3>
+			<p>This is the code that is run when we create an instance of a Cell.  In Minesweeper.Game.Initialise we call this constructur to generate our cells.</p>
+
+			<pre><span class="blue">public</span> <span class="blue">function</span> Cell(x:int, y:int)
+{
+    <span class="olive">this</span>.Mined = <span class="blue">false</span>;
+    <span class="olive">this</span>.Flagged = <span class="blue">false</span>;
+    <span class="olive">this</span>.Questioned = <span class="blue">false</span>;
+    <span class="olive">this</span>.Ignore = <span class="blue">false</span>;
+    <span class="olive">this</span>.X = x;
+    <span class="olive">this</span>.Y = y;
+    <span class="olive">this</span>.Adjacent = 0;
+
+    <span class="olive">this</span>.<span class="olive">gotoAndStop</span>(1);
+    <span class="olive">this</span>.buttonMode = <span class="blue">true</span>;
+    <span class="olive">this</span>.<span class="olive">useHandCursor</span> = <span class="blue">true</span>;
+    <span class="olive">this</span>.mouseChildren = <span class="blue">false</span>
+    <span class="olive">this</span>.<span class="olive">addEventListener</span>(MouseEvent.MOUSE_UP, Click);
+}</pre>
+
+			<h3>Clicking on a cell</h3>
+			<p>The click method is long because there are a variety of possible outcomes when you click on a cell - reveal it, flag it, question mark it, unflag/unquestion mark it.... is it blank?  Does it have adjacent mines?  Are any of the adjacent cells empty?  Even though it is long you should be able to follow it, it's not complicated we just need to work through each scenario.</p>
+
+			<pre><span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> Click(e:MouseEvent):<span class="blue">void</span>
+{
+    <span class="blue">if</span>(!Game.Playing)
+    <span class="blue">return</span>;
+
+    <span class="blue">var</span> cell:Cell = e.<span class="olive">target</span> as Cell;
+
+    <span class="green">// When we're in flag mode</span>
+    <span class="blue">if</span>(Game.FlagMode == <span class="blue">true</span>)
+    {
+        <span class="green">// Make questioned if it's flagged</span>
+        <span class="blue">if</span>(cell.Flagged)
+        {
+            cell.<span class="olive">gotoAndStop</span>(6);
+            cell.Questioned = <span class="blue">true</span>;
+            cell.Flagged = <span class="blue">false</span>;
+            Game.MinesRemaining++;
+            Game.MinesField.<span class="olive">text</span> = Game.MinesRemaining + (Game.MinesRemaining != 1 ? "<span class="magenta"> mines</span>" : "<span class="magenta"> mine</span>");
+
+        }
+
+        <span class="green">// Make normal if it's questioned</span>
+        <span class="blue">else</span> <span class="blue">if</span>(cell.Questioned)
+        {
+            cell.<span class="olive">gotoAndStop</span>(1);
+            cell.Flagged = <span class="blue">false</span>;
+            cell.Questioned = <span class="blue">false</span>;
+        }
+
+        <span class="green">// Make flagged if it's normal and there's available mines</span>
+        <span class="blue">else</span> <span class="blue">if</span>(Game.MinesRemaining &gt; 0)
+        {
+            Game.MinesRemaining--;
+            Game.MinesField.<span class="olive">text</span> = Game.MinesRemaining + (Game.MinesRemaining != 1 ? "<span class="magenta"> mines</span>" : "<span class="magenta"> mine</span>");
+            cell.<span class="olive">gotoAndStop</span>(4);
+            cell.Flagged = <span class="blue">true</span>;
+            cell.Questioned = <span class="blue">false</span>;
+        }
+
+        <span class="blue">return</span>;
+    }
+
+    <span class="green">// When the cell is blank</span>
+    <span class="blue">if</span>(cell.Ignore)
+    {
+        <span class="blue">if</span>(cell.AdjacentField.<span class="olive">text</span> != "<span class="magenta"></span>")
+        {
+            <span class="blue">var</span> adjacentcells:<span class="olive">Array</span> = AdjacentCells(cell.X, cell.Y);
+
+            <span class="blue">if</span>(adjacentcells.<span class="olive">length</span> == 0)
+            <span class="blue">return</span>;
+
+            <span class="blue">var</span> adjacentminesfound:int = 0;
+            <span class="blue">var</span> acell:Cell;
+            <span class="blue">var</span> ax:int;
+            <span class="blue">var</span> ay:int;
+
+            <span class="blue">for</span>(<span class="blue">var</span> i:int=0; i&lt;adjacentcells.<span class="olive">length</span>; i++)
+            {
+                ax = adjacentcells[i].X;
+                ay = adjacentcells[i].Y;
+                acell = Game.Grid[ax][ay];
+
+                <span class="blue">if</span>(acell.Mined &amp;&amp; acell.Flagged)
+                {
+                    adjacentminesfound++;
+                }
+            }
+
+            <span class="blue">if</span>(adjacentminesfound == cell.Adjacent)
+            {
+                Game.ClearEmptySpaces(cell.X, cell.Y);
+            }
+        }
+
+        <span class="blue">return</span>;
+    }
+
+    <span class="green">// Otherwise if we've flagged or questioned the cell we leave</span>
+    <span class="blue">if</span>(cell.Flagged || cell.Questioned)
+    <span class="blue">return</span>;
+
+    <span class="green">// If there's a mine and it's not flagged we lose</span>
+    <span class="blue">if</span>(cell.Mined &amp;&amp; cell.Flagged == <span class="blue">false</span>)
+    {
+        cell.<span class="olive">gotoAndStop</span>(5);
+        Game.Lose();
+        <span class="blue">return</span>;
+    }
+
+    <span class="green">// Clear the mine, and possibly any adjacent cells</span>
+    <span class="blue">if</span>(cell.Adjacent == 0)
+    {
+        cell.<span class="olive">gotoAndStop</span>(2);
+        Game.ClearEmptySpaces(cell.X, cell.Y);
+    }
+    <span class="blue">else</span>
+    {
+        Reveal(cell);
+    }
+
+    <span class="green">// Check to see if we won the game</span>
+    Game.CheckWin();
+}
+</pre>
+
+			<h3>Revealing cells and setting them blank</h3>
+			<p>These 3 small methods handle some of the basic behaviour of cells - revealing and blanking them.  A cell is Reveal'd by mouse clicking, and FinalReveal'd by the game itself if you lose.  Cells are Blank'd when the grid is generated.</p>
+
+			<pre><span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> Blank(cell:Cell):<span class="blue">void</span>
+{
+    cell.Ignore = <span class="blue">true</span>;
+    cell.<span class="olive">gotoAndStop</span>(2);
+}
+
+<span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> Reveal(cell:Cell):<span class="blue">void</span>
+{
+    cell.Ignore = <span class="blue">true</span>;
+    cell.<span class="olive">gotoAndStop</span>(3);
+    cell.AdjacentField.<span class="olive">text</span> = <span class="olive">String</span>(cell.Adjacent);
+    cell.AdjacentField.<span class="olive">textColor</span> = Colors[cell.Adjacent];
+}
+
+<span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> FinalReveal(cell:Cell):<span class="blue">void</span>
+{
+    <span class="blue">if</span>(cell.Mined == <span class="blue">false</span>)
+    {
+        cell.<span class="olive">gotoAndStop</span>(2);
+
+        <span class="blue">if</span>(cell.Adjacent &gt; 0)
+        {
+            cell.AdjacentField.<span class="olive">text</span> = <span class="olive">String</span>(cell.Adjacent);
+            cell.AdjacentField.<span class="olive">textColor</span> = Colors[cell.Adjacent];
+        }
+    }
+    <span class="blue">else</span> <span class="blue">if</span>(cell.Flagged == <span class="blue">false</span>)
+    {
+        cell.<span class="olive">gotoAndStop</span>(5);
+    }
+}</pre>
+
+			<h3>Adjacent cells</h3>
+			<p>At several points during the game we want to know what cells are adjacent to another.  We don't want to know it enough to justify saving that information for every cell, instead we use this method to retrieve it when we want it.  If we were to save it on a Hard game it would be up to 3,840 more pieces of data to hold in memory!</p>
+			<p>The coordinates we check are probably going to look like rubbish at first, but you will see in this image they do make sense.  The center of the image is the x and y parameters passed to the method.</p>
+
+			<div class="image">
+				<img src="/minesweeper/images/adjacent-cells.jpg" alt="Map of adjacent cells" />
+				Mapping adjacent cells
+			</div>
+
+			<pre><span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> AdjacentCells(x:int, y:int):<span class="olive">Array</span>
+{
+    <span class="blue">var</span> adjacentcells:<span class="olive">Array</span> = <span class="blue">new</span> <span class="olive">Array</span>();
+
+    <span class="blue">if</span>(Game.InRange(x - 1, y - 1))
+    adjacentcells.<span class="olive">push</span>(new Coordintes(y - 1, x - 1));
+
+    <span class="blue">if</span>(Game.InRange(x, y - 1))
+    adjacentcells.<span class="olive">push</span>((new Coordintes(y - 1, x));
+
+    <span class="blue">if</span>(Game.InRange(x + 1, y - 1))
+    adjacentcells.<span class="olive">push</span>((new Coordintes(y - 1, x + 1));
+
+    <span class="blue">if</span>(Game.InRange(x - 1, y))
+    adjacentcells.<span class="olive">push</span>((new Coordintes(y , x - 1));
+
+    <span class="blue">if</span>(Game.InRange(x + 1, y))
+    adjacentcells.<span class="olive">push</span>((new Coordintes(y, x + 1));
+
+    <span class="blue">if</span>(Game.InRange(x - 1, y + 1))
+    adjacentcells.<span class="olive">push</span>((new Coordintes(y + 1, x - 1));
+
+    <span class="blue">if</span>(Game.InRange(x, y + 1))
+    adjacentcells.<span class="olive">push</span>((new Coordintes(y + 1, x));
+
+    <span class="blue">if</span>(Game.InRange(x + 1, y + 1))
+    adjacentcells.<span class="olive">push</span>((new Coordintes(y + 1, x + 1));
+
+    <span class="blue">return</span> adjacentcells;
+}</pre>
+
+			<p>The AdjacentCells method uses a very primitive class created just for it.  It needs to go in "Coordinates.as" in the same folder as Game.as and Cell.as, and it simply consists of:</p>
+
+<pre>package Minesweeper
+{
+    <span class="blue">public</span> <span class="blue">class</span> Coordinates
+    {
+    <span class="blue">public</span> <span class="blue">var</span> X:int;
+    <span class="blue">public</span> <span class="blue">var</span> Y:int;
+
+    <span class="blue">public</span> <span class="blue">function</span> Coordinates(y:int, x:int)
+    {
+        <span class="olive">this</span>.X = x;
+        <span class="olive">this</span>.Y = y;
+    }
+    }
+}</pre>
+
+			<p>That's it, we're done!</p>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/minesweeper/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/minesweeper/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/minesweeper/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/minesweeper/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/minesweeper/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/minesweeper/source/Coordinates.as.html">Source: Coordinates.as</a></li>
+				<li><a href="/minesweeper/source/minesweeper.zip">Download the complete source</a></li>
+			</ul>
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+
+		<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

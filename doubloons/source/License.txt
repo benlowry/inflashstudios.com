@@ -1,0 +1,8 @@
+Doubloons by InFlash Studios is licensed under Creative Commons Attribution 3.0 United States.
+http://creativecommons.org/licenses/by/3.0/us/
+
+You are free to share, modify and make derivative works whether for fun, for free or for profit, but you must provide attribution to InFlash Studios.  You can do this by linking to us in your game.  
+
+The link can be discrete but it must exist in your game.  Suggested link:
+<a href="http://www.inflashstudios.com/">Based on a tutorial from InFlash Studios</a>
+

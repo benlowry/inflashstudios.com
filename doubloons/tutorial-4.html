@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Part 4: Game screens, saving and sound | Learn how to make Bloons in Flash ~ InFlash Studios</title>
+	<style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Bloons in Flash</h1>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Part 4: Game screens</h1>
+
+			<h2>Game screens</h2>
+			<p>These are the boring bits of any game ... the starting menu, the win/lose/restart notifications, that kind of thing.  They're also core components so we really have to make them even if they're no fun.</p>
+
+			<h3>The starting screen</h3>
+			<p>This screen is just a semi-transparent white background (can't see it in the pic), a logo PNG and a SimpleButton called PlayButton.  From the library we link it as Doubloons.Menu.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/mainscreen.jpg" alt="The starting screen" />
+				The starting screen
+			</div>
+
+			<p>The code is very uncomplicated.  We put an event handler on our PlayButton that replaces the Menu with the LevelSelect screen.</p>
+
+            <pre class="brush: actionscript3">package Doubloons
+{
+    import flash.display.MovieClip;
+    import flash.display.SimpleButton;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    
+    public class Menu extends MovieClip
+    {
+        public function Menu()
+        {
+            this.alpha = 0;
+            this.addEventListener(Event.ENTER_FRAME, this.FadeIn);
+            
+            this.PlayButton.addEventListener(MouseEvent.CLICK, this.Play);
+        }
+        
+        private function Play(e:MouseEvent):void
+        {
+            this.parent.addChild(new LevelSelect());
+            this.parent.removeChild(this);
+        }
+        
+        private function FadeIn(e:Event):void
+        {
+            this.alpha += 0.05;
+            
+            if(this.alpha >= 1)
+            {
+                this.removeEventListener(Event.ENTER_FRAME, this.FadeIn);
+            }
+        }
+    }
+}</pre>
+
+			<h3>The level selection screen</h3>
+
+			<p>This screen is more complicated than the main menu but still very simple.  It has 12 boxes each of which represents a level.  In each of those boxes it creates an instance of the level to use as a thumbnail, and then it enables or disables that button depending on whether we've unlocked it yet.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/levelselect.jpg" alt="The level select screen" />
+				The level select screen
+			</div>
+
+			<p>Here you can see how we're using those 'public static' properties from our Document Class to store the current level from within this class when we click on a button.</p>
+
+			<pre class="brush: actionscript3">package Doubloons
+{
+    import flash.display.MovieClip;
+    import flash.display.SimpleButton;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    import flash.filters.GlowFilter;
+    
+    public class LevelSelect extends MovieClip
+    {
+        public function LevelSelect()
+        {
+            var level:MovieClip;
+            var upto:int = SaveManager.Get();
+            
+            for(var i:int=1; i&lt;13; i++)
+            {
+                level = this["Level" + i] as MovieClip;
+                level.LevelNumber = i;
+                level.LevelLoader = Doubloons.Level["Level" + i] as Function;
+                
+                // Create an instance of the level to get the thumbnail
+                var l:Level = level.LevelLoader();
+                
+                // Create the thumbnail
+                var thumb:MovieClip = new l.Clip();
+                thumb.scaleX = 0.3;
+                thumb.scaleY = 0.3;
+                thumb.x = level.width / 2 - thumb.width / 2;
+                thumb.y = level.height / 2 - thumb.height / 2;
+                
+                level.addChild(thumb);
+                    
+                // If this level is higher than what we're up to we disable the button
+                if(i > upto)
+                {
+                    level.alpha = 0.5;
+                    level.useHandCursor = false;
+                }
+                
+                // Otherwise we enable it and add the mouse over, out and click events
+                else
+                {
+                    level.useHandCursor = true;
+                    level.buttonMode = true;
+                    level.mouseChildren = false;
+                    level.filters = [new GlowFilter(0x000000, 0.3)];
+                    
+                    level.addEventListener(MouseEvent.CLICK, this.LoadLevel);
+                    level.addEventListener(MouseEvent.MOUSE_OVER, Over);
+                    level.addEventListener(MouseEvent.MOUSE_OUT, Out);                  
+                }
+            }
+        }
+        
+        // Clicking a level button
+        private function LoadLevel(e:MouseEvent):void
+        {
+            var level:MovieClip = e.target as MovieClip;
+            Main.CurrentLevel = level.LevelLoader();
+            Main.CurrentLevelNumber = level.LevelNumber;            
+            Main.CurrentLevelRestarter = level.LevelLoader;
+            Main.LevelHolder.addChild(new Main.CurrentLevel.Clip());
+            this.addEventListener(Event.ENTER_FRAME, this.FadeOut);
+        }
+        
+        // Mousing over a level button
+        private static function Over(e:MouseEvent):void
+        {
+            var level:MovieClip = e.target as MovieClip;
+            level.filters = [new GlowFilter(0xFFCC00, 1)];
+        }
+        
+        // Mousing off a level button
+        private static function Out(e:MouseEvent):void
+        {
+            var level:MovieClip = e.target as MovieClip;            
+            level.filters = [new GlowFilter(0x000000, 0.3)];
+        }
+        
+        // Fades this screen out to start a new level
+        private function FadeOut(e:Event):void
+        {
+            this.alpha -= 0.05;
+            
+            if(this.alpha &lt;= 0)
+            {
+                this.removeEventListener(Event.ENTER_FRAME, this.FadeOut);
+                
+                // go to the level selection
+                this.parent.removeChild(this);              
+                Main.Playing = true;
+            }
+        }
+    }
+}</pre>
+
+			<h3>The restart screen</h3>
+			<p>When you run out of shots you lose the level and have to restart it.  This is just a MovieClip with a single SimpleButton called RestartButton.  When we click it:</p>
+
+			<pre class="brush: actionscript3">package Doubloons
+{
+    import flash.display.MovieClip;
+    import flash.display.SimpleButton;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    
+    public class Restart extends MovieClip
+    {
+        public function Restart()
+        {
+            this.alpha = 0;
+            this.addEventListener(Event.ENTER_FRAME, this.FadeIn);
+            
+            this.RestartButton.addEventListener(MouseEvent.CLICK, this.RestartLevel);
+        }
+        
+		// Restarts the level
+        private function RestartLevel(e:MouseEvent):void
+        {
+            this.parent.removeChild(this);
+            Main.CurrentLevel = Main.CurrentLevelRestarter();
+            Main.CurrentCoins = 0;
+            Main.LevelHolder.removeChildAt(0);
+            Main.LevelHolder.addChild(new Main.CurrentLevel.Clip());
+            Main.Playing = true;
+        }
+        
+        private function FadeIn(e:Event):void
+        {
+            this.alpha += 0.05;
+            
+            if(this.alpha >= 1)
+            {
+                this.removeEventListener(Event.ENTER_FRAME, this.FadeIn);
+            }
+        }
+    }</pre>
+
+			<h3>The next level screen</h3>
+			<p>The next level screen is shown if you successfully complete a level and it wasn't the last level.  It's also very simple, just a single button that takes you to the following level.</p>
+
+			<pre class="brush: actionscript3">package Doubloons
+{
+    import flash.display.MovieClip;
+    import flash.display.SimpleButton;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    
+    public class NextLevel extends MovieClip
+    {
+        public function NextLevel()
+        {
+            this.alpha = 0;
+            this.addEventListener(Event.ENTER_FRAME, this.FadeIn);
+            
+            this.NextLevelButton.addEventListener(MouseEvent.CLICK, this.StartNextLevel);
+        }
+        
+        private function StartNextLevel(e:MouseEvent):void
+        {
+            this.parent.removeChild(this);
+            Main.CurrentLevelNumber++;
+            Main.CurrentLevelRestarter = Level["Level" + Main.CurrentLevelNumber] as Function;
+            Main.CurrentLevel = Main.CurrentLevelRestarter();
+            Main.CurrentCoins = 0;
+            Main.LevelHolder.removeChildAt(0);
+            Main.LevelHolder.addChild(new Main.CurrentLevel.Clip());
+            Main.Playing = true;
+            
+            SaveManager.Save(Main.CurrentLevelNumber);
+        }
+        
+        private function FadeIn(e:Event):void
+        {
+            this.alpha += 0.05;
+            
+            if(this.alpha >= 1)
+            {
+                this.removeEventListener(Event.ENTER_FRAME, this.FadeIn);
+            }
+        }
+    }
+}</pre>
+
+			<h3>The win screen</h3>
+			<p>The Win screen is also very simple, just a button that takes you back to the game menu.</p>
+
+			<pre class="brush: actionscript3">package Doubloons
+{
+    import flash.display.MovieClip;
+    import flash.display.SimpleButton;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    
+    public class Win extends MovieClip
+    {
+        public function Win()
+        {
+            this.alpha = 0;
+            this.addEventListener(Event.ENTER_FRAME, this.FadeIn);
+            
+            this.addEventListener(MouseEvent.CLICK, this.Close);
+        }
+        
+        private function Close(e:MouseEvent):void
+        {
+            this.parent.addChild(new Menu());
+            this.parent.removeChild(this);
+        }
+        
+        private function FadeIn(e:Event):void
+        {
+            this.alpha += 0.05;
+            
+            if(this.alpha >= 1)
+            {
+                this.removeEventListener(Event.ENTER_FRAME, this.FadeIn);
+            }
+        }
+    }
+}</pre>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

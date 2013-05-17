@@ -1,0 +1,518 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Part 2: Setting up our Document class | Learn how to make Bloons in Flash ~ InFlash Studios</title>
+	<style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Bloons in Flash</h1>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Part 2: Setting up our Document class</h1>
+
+			<p>Our Document class is the main class that handles just about every component of the game.  Create a new ActionScript file and call it Main.as, then in your FLA put Doubloons.Main as the document class.</p>
+
+			<h2>Setting up our document class</h2>
+			<p>There's a few different bits and pieces we're going to have in our doc class.  Some properties will track the state of the game, and some functions will handle most of it.</p>
+
+			<h3>Our properties</h3>
+
+			<pre class="brush: actionscript3">private var Loading:Boolean = true; // a trigger that tells us the game is still loading
+public static var SoundOn:Boolean = true; // a trigger that tells us whether sound is on or off
+public static var Playing:Boolean = false; // a trigger that tells us the user is playing		
+
+// playing and scoring information
+public static var CurrentLevel:Level; // the current level
+public static var CurrentLevelRestarter:Function; // method to restart this level
+public static var CurrentLevelNumber:int = 0;		
+public static var CurrentCoins:int = 0; // the current coins i've collected
+public static var TotalCoins:int = 0; // the total coins i've collected
+public static var LevelHolder:MovieClip;
+
+// shooting information
+private var FiringPower:int;
+private var FiringAngle:Number;
+private var FiringIncrement:int;
+
+// our scenery managers
+private var Water:WaterManager; // the water manager controls moving the water back and forth
+private var Seagulls:SeagullManager; // the seagull manager controls spawning and moving seagulls
+private var Clouds:CloudManager; // the cloud manager controls spawning and moving clouds</pre>
+
+			<p>You'll notice a combination of private variables and public static variables.  This is because there are some things we need to access from other classes, and some things we don't.</p>
+			<p>You'll also see some stuff that we won't get to until later - things like our scenery manages and some of the level information.</p>
+
+
+			<h3>Our constructor</h3>
+			<p>The constructor is the function that is run when the movie first begins.  Our constructor sets up our FLA for the actual game, re-arranges the depths of some movieclips to put water above the ship, birds behind it etcetera.  It also sets up event handlers that are used for firing the cannon, and our game loop which is a method that processes all of the in-game logic in an EnterFrame event.</p>
+
+			<p>There's also a very rudimentary preloader you could use if this game wasn't so small - 50 kilobytes!  I've left the code in place to show you how it's done but it's not necessary as the game is now.</p>
+
+            <pre class="brush: actionscript3">public function Main()
+{           
+    // Set up the water manager
+    this.Water = new WaterManager();
+    this.Water.Pieces = [this.Water1, this.Water2, this.Water3];
+    this.Water.Pieces[0].Direction = 1;
+    this.Water.Pieces[1].Direction = 1;
+    this.Water.Pieces[2].Direction = -1;
+    
+    // Set up the seagull and cloud managers
+    this.Clouds = new CloudManager();
+    this.addChild(this.Clouds);
+    
+    this.Seagulls = new SeagullManager();
+    this.addChild(this.Seagulls);
+    
+    // Set up the level holder
+    LevelHolder = new MovieClip();
+    LevelHolder.x = 182;
+    LevelHolder.y = 90;
+    this.addChild(LevelHolder);
+    
+    // Put the ship over the seaguls, the cannon over the ship, and water3 over the ship
+    this.setChildIndex(this.Ship, this.numChildren - 1);
+    this.setChildIndex(this.Cannon, this.numChildren - 1);
+    this.setChildIndex(this.Water3, this.numChildren - 1);
+    this.setChildIndex(this.StatusBar, this.numChildren - 1);
+    
+    // Hide the status bar and cannon power
+    this.StatusBar.visible = false;
+    
+    this.CannonBall.visible = false;
+    this.CannonBall.smoothing = true;
+    
+    this.CannonPower.visible = false;
+    this.CannonPower.x = (stage.stageWidth / 2) - (this.CannonPower.width / 2);
+    this.CannonPower.y = (stage.stageHeight / 2) - (this.CannonPower.height / 2);
+    this.setChildIndex(this.CannonPower, this.numChildren - 1);
+    this.setChildIndex(this.CannonBall, this.numChildren - 1);
+
+    // Set up the gameloop, a method that runs over and over again and 
+    // processes all of our game logic
+    stage.addEventListener(Event.ENTER_FRAME, this.Tick);
+    
+    // Set up the sound button
+    this.SoundButton.addEventListener(MouseEvent.CLICK, this.ToggleSound);          
+    
+    // Set up the restart button
+    this.RestartSmallButton.addEventListener(MouseEvent.CLICK, this.RestartLevel);
+    
+    // Set up the mouse tracker that angles the cannon if we are playing
+    stage.addEventListener(MouseEvent.MOUSE_MOVE, this.RotateCannon);
+    stage.addEventListener(MouseEvent.MOUSE_DOWN, this.LoadCannon);
+
+    // Set up the events that will track the preloader
+    loaderInfo.addEventListener(ProgressEvent.PROGRESS, this.PreloadProgress);
+    loaderInfo.addEventListener(Event.COMPLETE, this.PreloadComplete);
+}
+
+// This method is called each time a bit of the movie loads
+private function PreloadProgress(e:ProgressEvent):void
+{
+    var done:Number = loaderInfo.bytesLoaded;
+    var total:Number = loaderInfo.bytesTotal;
+    
+    // Update the progress bar
+    //this.Bar.width = (done / total) * 200;
+}
+
+// This method is called when the preloading is finished
+private function PreloadComplete(e:Event):void
+{
+    // Get rid of the event listeners for preloading the movie
+    loaderInfo.removeEventListener(ProgressEvent.PROGRESS, this.PreloadProgress);
+    loaderInfo.removeEventListener(Event.COMPLETE, this.PreloadComplete);
+    
+    // Set our loading trigger to false so the gameloop continues
+    this.Loading = false;
+    
+    // Attach the main menu
+    this.addChild(new Menu());
+}</pre>
+
+			<h2>Handling the cannon</h2>
+			<p>The classes to handle the cannon moving and firing are a part of our document class.</p>
+
+			<p>Movement is tracked via the MouseEvent.MOUSE_MOVE handler we set up in the constructor above.  If you don't understand the math don't worry about it, it just calculates the angle to the mouse and then rotates the cannon to that angle.</p>
+
+			<pre class="brush: actionscript3">// Rotates the cannon to follow the mouse
+private function RotateCannon(e:MouseEvent):void
+{
+    // if we're not playing or the cannonball is visible then don't rotate the cannon
+    if(!Playing || this.CannonBall.visible)
+        return;
+
+    // get the angle from the cannon to the mouse       
+    var radians:Number = Math.atan2(e.stageY - this.Cannon.y, e.stageX - this.Cannon.x);
+    
+    // if the angle is outside of these numbers don't rotate it
+    if(radians < -1.5 || radians > 0.25)
+        return;
+
+    this.Cannon.rotation = radians * (180 / Math.PI);
+}</pre>
+
+			<p>Loading the cannon is a bit more complicated, it creates a second EnterFrame event which increases or decreases the firing power until the mouse button is released.</p>
+
+			<pre class="brush: actionscript3">// Loads the cannon for firing.  This sets up the AdjustCannonPower
+// enterframe event which increases and decreases power until we
+// release the mouse button
+private function LoadCannon(e:MouseEvent):void
+{
+    // If we're not playing, or we are currently watching a shot
+    if(!Playing || this.CannonBall.visible)
+        return;
+    
+    // If we clicked on a button
+    if(e.target is SimpleButton)
+        return;
+        
+    this.CannonPower.visible = true;
+    this.CannonPower.addEventListener(Event.ENTER_FRAME, this.AdjustCannonPower);
+    stage.addEventListener(MouseEvent.MOUSE_UP, this.FireCannon);
+    
+    this.FiringPower = 0;
+    this.FiringIncrement = 1;
+}</pre>
+
+			<p>The code to increase or decrease the firing power is very simple:</p>
+
+			<pre class="brush: actionscript3">// Adjusts the cannon power 		
+private function AdjustCannonPower(e:Event):void
+{
+    this.FiringPower += this.FiringIncrement;
+    
+    // Reverse the increase direction if it's 100 or 1
+    if(this.FiringPower == 100)
+        this.FiringIncrement = -1;
+    else if(this.FiringPower == 1)
+        this.FiringIncrement = 1;
+    
+    // Update the textfield and its shadow
+    this.CannonPower.Power.text = this.FiringPower.toString();
+    this.CannonPower.Power2.text = this.FiringPower.toString();         
+    
+    // Update the background fill (circle that fills up)
+    this.CannonPower.Fill.height = (this.FiringPower / 100) * 40;
+    this.CannonPower.Fill.y = 40 - this.CannonPower.Fill.height;
+}</pre>
+
+			<p>Finally the code to actually fire the cannon, which is called via the MouseEvent.MOUSE_UP event, is a little more complex.  Some parts of it won't make sense at this point unless you're looking ahead in the source files, like resetting 'ignored' items in the level.</p>
+
+			<pre class="brush: actionscript3">// Fires the cannon
+private function FireCannon(e:MouseEvent):void
+{
+    if(!Playing || this.CannonBall.visible)
+        return;         
+        
+    // Get rid of the cannon power movieclip and enterframe
+    this.CannonPower.visible = false;
+    this.CannonPower.removeEventListener(Event.ENTER_FRAME, this.AdjustCannonPower);
+    stage.removeEventListener(MouseEvent.MOUSE_UP, this.FireCannon);
+    
+    // Reset any 'ignored' items in the level
+    var level:MovieClip = LevelHolder.getChildAt(0) as MovieClip;
+    var item:MovieClip;
+    
+    for(var i:int =level.numChildren-1; i>-1; i--)
+    {
+        item = level.getChildAt(i) as MovieClip;
+        item.Ignore = false;
+    }
+        
+    // Reset the cannon ball
+    var ballpoint:Point = this.Cannon.localToGlobal(new Point(this.Cannon.FiringPoint.x, this.Cannon.FiringPoint.y));
+    this.CannonBall.x = ballpoint.x;
+    this.CannonBall.y = ballpoint.y;
+    this.CannonBall.visible = true;
+    
+    // Apply the angle / power to the cannon ball
+    this.CannonBall.Angle = this.Cannon.rotation;
+    this.CannonBall.StartX = ballpoint.x;
+    this.CannonBall.StartY = ballpoint.y;
+    this.CannonBall.DirectionX = Math.cos(this.Cannon.rotation * Math.PI / 180) * this.FiringPower;
+    this.CannonBall.DirectionY = Math.sin(this.Cannon.rotation * Math.PI / 180) * this.FiringPower;
+    
+    // Subtract this shot
+    CurrentLevel.Shots--;
+}</pre>
+
+			<h2>Turning sound on and off, and restarting levels</h2>
+			<p>These two methods are very simple and get attached to our Sound and Restart buttons we saw in the first part.</p>
+
+			<pre class="brush: actionscript3">// turns the sound on or off
+private function ToggleSound(e:MouseEvent):void
+{
+    this.SoundOn = !this.SoundOn;
+    this.SoundButton.alpha = this.SoundOn ? 1 : 0.5;
+}
+
+// Restarts the level
+private function RestartLevel(e:MouseEvent):void
+{
+    CurrentLevel = Main.CurrentLevelRestarter();
+    CurrentCoins = 0;
+    LevelHolder.removeChildAt(0);
+    LevelHolder.addChild(new Main.CurrentLevel.Clip());
+}</pre>
+
+			<h2>The Game Loop</h2>
+			<p>This is the complicated bit.  This piece of code is called on an ENTER_FRAME event which means it runs over and over again 1 / framerate times per second.  It handles all of the actual moving around bits like the clouds, seagulls, cannonball, detecting when you shoot a doubloon etcetera.</p>
+			<p>Parts of this code are a bit complicated especially since we haven't gotten to some bits yet, but you should be able to understand roughly what is happening even if you can't see the big picture yet.</p>
+
+			<pre class="brush: actionscript3">// Our gameloop
+private function Tick(e:Event):void
+{
+    // water, seagulls and clouds
+    this.Water.Tick();
+    this.Seagulls.Tick();
+    this.Clouds.Tick();
+
+    // at this point if the game is still loading or we aren't playing we don't go any further in the gameloop
+    if(Loading || !Playing)
+        return;
+        
+    // status bar
+    this.StatusBar.visible = true;
+    this.StatusBar.Level.text = "LEVEL " + CurrentLevelNumber + ": " + CurrentLevel.CoinsToWin + " COINS";
+    this.StatusBar.Shots.text = CurrentLevel.Shots.toString();
+    this.StatusBar.Coins.text = CurrentCoins.toString();
+    
+    // cannon ball
+    if(this.CannonBall.visible)
+    {
+        this.CannonBall.rotation += 3;
+        this.CannonBall.DirectionY += 3; // gravity
+        
+        // Move the ball, because we can be adjusting x/y in large amounts we break it down
+        // into a series of steps that allow us to check at each pixel whether we've hit
+        // something.
+        var movex:Number = this.CannonBall.DirectionX / 2;
+        var movey:Number = this.CannonBall.DirectionY / 2;
+        
+        var xsteps:int = Math.ceil(Math.abs(movex));
+        var ysteps:int = Math.ceil(Math.abs(movey));
+                       
+        // These variables are for the items in the level.  We declare outside of 
+        // the while loop because they are used every time and we it's more efficient 
+        // than creating new variables every time we go through the loop
+        var ballp:Point = new Point(this.CannonBall.x - 9, this.CannonBall.y - 9);
+        var level:MovieClip = LevelHolder.getChildAt(0) as MovieClip;;
+        var item:MovieClip;
+        var itemb:BitmapData;
+        var itemp:Point = new Point();
+        var i:int;
+        
+
+        // Calculate the  ball moving                   
+        while(xsteps > 0 || ysteps > 0)
+        {                               
+            if(xsteps > 0)
+                this.CannonBall.x += movex > 0 ? 1 : -1;
+                
+            if(ysteps > 0)
+                this.CannonBall.y += movey > 0 ? 1 : -1;
+            
+            xsteps--;
+            ysteps--;
+            
+            // Check if it's moved off the stage
+            if(this.CannonBall.y > 400 || this.CannonBall.x > 550)
+            {
+                this.CannonBall.visible = false;
+                
+                // Check if the level is complete:
+                // 1) We have enough coins (go to next level or win)
+                // 2) We have no more shots (restart this level)
+                
+                if(CurrentCoins >= CurrentLevel.CoinsToWin)
+                {
+                    if(CurrentLevelNumber < 12)
+                    {
+                        // next level
+                        Playing = false;
+                        this.addChild(new NextLevel());
+                    }
+                    else
+                    {
+                        // win
+                        Playing = false;
+                        this.addChild(new Win());
+                    }
+                }
+                
+                else if(CurrentLevel.Shots == 0)
+                {
+                    Playing = false;
+                    this.addChild(new Restart());
+                    
+                }
+                
+                return;                     
+            }
+            
+            // Otherwise check if it's hit anything in the level
+            for(i=level.numChildren-1; i>-1; i--)
+            {
+                item = level.getChildAt(i) as MovieClip;
+                
+                // Check for hits, because the items are circles
+                // we have always got a hit if the distance between
+                // the ball and an item is less than their combined
+                // radiuses.
+                itemp.x = LevelHolder.x + item.x + 9;
+                itemp.y = LevelHolder.y + item.y + 9;
+                    
+                distance = Math.abs(Point.distance(ballp, itemp));
+                
+                if(distance > (item.width / 2) + (this.CannonBall.width / 2))
+                    continue;
+
+                // If we've hit a doubloon then we've collected it
+                if(item is Doubloon)
+                {
+                    CurrentCoins++;
+                    TotalCoins++;
+                    level.removeChildAt(i); 
+                    
+                    // Put the sound here
+                    // SoundManager.Play(Some_Sound_Class);
+                }
+                
+                // If we hit a blocker then the ball is going to drop straight down
+                else if(item is Blocker && !item.Ignore)
+                {
+                    item.Ignore = true; // We set this so we don't keep processing the hit against this blocker
+                    
+                    this.CannonBall.DirectionX = 0;
+                    this.CannonBall.DirectionY = Math.sin(this.CannonBall.Angle * Math.PI / 180) * this.CannonBall.DirectionY;
+                    
+                    // Put the sound here
+                    // SoundManager.Play(Some_Sound_Class);
+                    
+                    return;
+                }
+            }
+        }
+    }
+}</pre>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

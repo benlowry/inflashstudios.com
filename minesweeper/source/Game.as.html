@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Source: Game.as | Learn how to make Minesweeper in Flash ~ InFlash Studios</title>
+	 <style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Minesweeper in Flash</h1>
+			
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/minesweeper/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/minesweeper/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/minesweeper/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/minesweeper/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/minesweeper/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/minesweeper/source/Coordinates.as.html">Source: Coordinates.as</a></li>
+				<li><a href="/minesweeper/source/minesweeper.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Source: Game.as</h1>
+
+			<pre>package Minesweeper
+{
+    <span class="blue">import</span> Minesweeper.Cell;
+    <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">display</span>.<span class="olive">MovieClip</span>;
+    <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">display</span>.SimpleButton;
+    <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">display</span>.<span class="olive">Stage</span>;
+    <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">text</span>.<span class="olive">TextField</span>;
+    <span class="blue">import</span> <span class="olive">flash</span>.<span class="olive">text</span>.<span class="olive">TextFormat</span>;
+    <span class="blue">import</span> <span class="olive">flash</span>.events.MouseEvent;
+    <span class="blue">import</span> <span class="olive">flash</span>.events.TimerEvent;
+    <span class="blue">import</span> <span class="olive">flash</span>.events.KeyboardEvent;
+    <span class="blue">import</span> <span class="olive">flash</span>.events.Event;
+    <span class="blue">import</span> <span class="olive">flash</span>.utils.Timer;
+    <span class="blue">import</span> <span class="olive">flash</span>.ui.Keyboard;
+
+    <span class="blue">public</span> <span class="blue">class</span> Game <span class="blue">extends</span> <span class="olive">MovieClip</span>
+    {
+        <span class="blue">private</span> <span class="blue">static</span> const LargeText:<span class="olive">TextFormat</span> = <span class="blue">new</span> <span class="olive">TextFormat</span>();
+        LargeText.<span class="olive">color</span> = 0x333333;
+        LargeText.<span class="olive">size</span> = 16;
+        LargeText.<span class="olive">font</span> = "<span class="magenta">Arial</span>";
+
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> STAGE:<span class="olive">Stage</span>;
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> Playing:<span class="olive">Boolean</span>;
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> Rows:int;
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> Columns:int;
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> Mines:int;
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> MinesRemaining:int;
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> Seconds:int;
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> Grid:<span class="olive">Array</span>;
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> Clock:Timer;
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> FlagMode:<span class="olive">Boolean</span>;
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> GameBoard:<span class="olive">MovieClip</span>;
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">var</span> TimerField:<span class="olive">TextField</span>;
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> MinesField:<span class="olive">TextField</span>;
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">var</span> WinNotice:<span class="olive">MovieClip</span>;
+
+        <span class="blue">public</span> <span class="blue">function</span> Game()
+        {
+            STAGE = <span class="olive">this</span>.stage;
+            loaderInfo.<span class="olive">addEventListener</span>(Event.COMPLETE, Initialise);
+        }
+
+        <span class="blue">public</span> <span class="blue">function</span> Initialise(e:Event):<span class="blue">void</span>
+        {
+            <span class="green">// Set up our button handlers</span>
+            <span class="olive">this</span>.EasyButton.<span class="olive">addEventListener</span>(MouseEvent.MOUSE_UP, StartEasy);
+            <span class="olive">this</span>.MediumButton.<span class="olive">addEventListener</span>(MouseEvent.MOUSE_UP, StartMedium);
+            <span class="olive">this</span>.HardButton.<span class="olive">addEventListener</span>(MouseEvent.MOUSE_UP, StartHard);
+
+            <span class="green">// Set up our clock</span>
+            Clock = <span class="blue">new</span> Timer(1000);
+            Clock.<span class="olive">addEventListener</span>(TimerEvent.TIMER, Tick);
+
+            <span class="green">// Set up our game board which holds all of the cells</span>
+            GameBoard = <span class="blue">new</span> <span class="olive">MovieClip</span>();
+            GameBoard.buttonMode = <span class="blue">true</span>;
+            GameBoard.<span class="olive">useHandCursor</span> = <span class="blue">true</span>;
+            <span class="olive">this</span>.addChild(GameBoard);
+
+            <span class="green">// Set up our timer and mine display fields</span>
+            TimerField = <span class="blue">new</span> <span class="olive">TextField</span>();
+            TimerField.x = 15;
+            TimerField.y = 354;
+            TimerField.defaultTextFormat = LargeText;
+            TimerField.<span class="olive">selectable</span>=  <span class="blue">false</span>;
+            <span class="olive">this</span>.addChild(TimerField);
+
+            MinesField = <span class="blue">new</span> <span class="olive">TextField</span>();
+            MinesField.x = 151;
+            MinesField.y = 354;
+            MinesField.defaultTextFormat = LargeText;
+            MinesField.<span class="olive">selectable</span> = <span class="blue">false</span>;
+            <span class="olive">this</span>.addChild(MinesField);
+
+            <span class="green">// Set up our win notice</span>
+            WinNotice = <span class="blue">new</span> Minesweeper.WinNotice();
+            WinNotice.x = 0;
+            WinNotice.y = 56;
+            WinNotice.<span class="olive">visible</span> = <span class="blue">false</span>;
+            <span class="olive">this</span>.addChild(WinNotice);
+
+            <span class="green">// Set up our key handler for placing flags</span>
+            STAGE.<span class="olive">addEventListener</span>(KeyboardEvent.KEY_DOWN, FlagModeOn);
+            STAGE.<span class="olive">addEventListener</span>(KeyboardEvent.KEY_UP, FlagModeOff);
+            StartHard(<span class="blue">null</span>);
+        }
+
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> StartEasy(e:MouseEvent):<span class="blue">void</span>
+        {
+            Rows = 9;
+            Columns = 9;
+            Mines = 10;
+            StartGame();
+        }
+
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> StartMedium(e:MouseEvent):<span class="blue">void</span>
+        {
+            Rows = 16;
+            Columns = 16;
+            Mines = 40;
+            StartGame();
+        }
+
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> StartHard(e:MouseEvent):<span class="blue">void</span>
+        {
+            Rows = 30;
+            Columns = 16;
+            Mines = 99;
+            StartGame();
+        }
+
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> StartGame():<span class="blue">void</span>
+        {
+            <span class="green">// Reset the game data</span>
+            Playing = <span class="blue">true</span>;
+            MinesRemaining = Mines;
+            Seconds = 0;
+            FlagMode = <span class="blue">false</span>;
+            TimerField.<span class="olive">text</span> = "<span class="magenta">0:00</span>";
+            MinesField.<span class="olive">text</span> = MinesRemaining + "<span class="magenta"> mines</span>";
+            WinNotice.<span class="olive">visible</span> = <span class="blue">false</span>;
+
+            <span class="green">// Reset the game grid</span>
+            <span class="blue">while</span>(GameBoard.numChildren &gt; 0)
+            GameBoard.removeChildAt(0);
+
+            GameBoard.x = (600 - (Rows * 19)) / 2;
+            GameBoard.y = (400 - (Columns * 19)) / 2;
+
+            <span class="green">// Set up the mines</span>
+            Grid = <span class="blue">new</span> <span class="olive">Array</span>(Rows);
+            <span class="blue">var</span> cell:Cell;
+            <span class="blue">var</span> x:int;
+            <span class="blue">var</span> y:int;
+
+            <span class="blue">for</span>(x=0; x&lt;Rows; x++)
+            {
+                Grid[x] = <span class="blue">new</span> <span class="olive">Array</span>(Columns);
+
+                <span class="blue">for</span>(y=0; y&lt;Columns; y++)
+                {
+                    cell = <span class="blue">new</span> Cell(x, y);
+                    cell.x = x * 19;
+                    cell.y = y * 19;
+                    Grid[x][y] = cell;
+                    GameBoard.addChild(cell);
+                }
+            }
+
+            <span class="green">// Place the mines</span>
+            <span class="blue">var</span> adjacentcells:<span class="olive">Array</span>;
+            <span class="blue">var</span> i:int;
+            <span class="blue">var</span> ax:int;
+            <span class="blue">var</span> ay:int;
+            <span class="blue">var</span> acell:Cell;
+
+            <span class="blue">while</span>(Mines &gt; 0)
+            {
+                <span class="green">// Choose a random cell to put the mine in</span>
+                x = <span class="olive">Math</span>.<span class="olive">round</span>(<span class="olive">Math</span>.<span class="olive">random</span>() * Rows - 1);
+                y = <span class="olive">Math</span>.<span class="olive">round</span>(<span class="olive">Math</span>.<span class="olive">random</span>() * Columns - 1);
+
+                <span class="green">// Make sure it's a valid cell</span>
+                <span class="blue">if</span>(!InRange(x, y))
+                <span class="blue">continue</span>;
+
+                cell = Grid[x][y];
+
+                <span class="blue">if</span>(cell.Mined)
+                <span class="blue">continue</span>;
+
+                <span class="green">// We've placed a mine</span>
+                Mines--;
+                cell.Mined = <span class="blue">true</span>;
+                cell.Adjacent = 0;
+
+                <span class="green">// Determine the cells adjacent to our new mine</span>
+                adjacentcells = Cell.AdjacentCells(x, y);
+
+                <span class="blue">if</span>(adjacentcells.<span class="olive">length</span> == 0)
+                <span class="blue">continue</span>;
+
+                <span class="green">// Increase their adjacent count on all valid cells</span>
+                <span class="blue">for</span>(i=0; i&lt;adjacentcells.<span class="olive">length</span>; i++)
+                {
+                    ax = adjacentcells[i].X;
+                    ay = adjacentcells[i].Y;
+                    acell = Grid[ax][ay];
+
+                    <span class="blue">if</span>(!acell.Mined)
+                    {
+                        acell.Adjacent += 1;
+                    }
+                }
+            }
+
+            <span class="green">// Start the clock</span>
+            Clock.<span class="olive">start</span>();
+        }
+
+        <span class="green">// Key handlers for turning flag mode on/off</span>
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> FlagModeOn(e:KeyboardEvent):<span class="blue">void</span>
+        {
+            <span class="blue">if</span>(e.keyCode == Keyboard.<span class="olive">SPACE</span>)
+            {
+                FlagMode = <span class="blue">true</span>;
+            }
+        }
+
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> FlagModeOff(e:KeyboardEvent):<span class="blue">void</span>
+        {
+            <span class="blue">if</span>(e.keyCode == Keyboard.<span class="olive">SPACE</span>)
+            {
+                FlagMode = <span class="blue">false</span>;
+            }
+        }
+
+        <span class="green">// Our clock tick</span>
+        <span class="blue">private</span> <span class="blue">static</span> <span class="blue">function</span> Tick(e:TimerEvent):<span class="blue">void</span>
+        {
+            Seconds++;
+
+            <span class="blue">var</span> minutes:int = <span class="olive">Math</span>.<span class="olive">floor</span>(Seconds / 60);
+            <span class="blue">var</span> seconds:int = Seconds % 60;
+
+            TimerField.<span class="olive">text</span> = minutes + "<span class="magenta">:</span>" + (seconds &gt; 9 ? seconds : "<span class="magenta">0</span>" + seconds);
+        }
+
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> CheckWin():<span class="blue">void</span>
+        {
+            <span class="blue">var</span> cell:Cell;
+
+            <span class="blue">for</span>(<span class="blue">var</span> x:int=0; x&lt;Rows; x++)
+            {
+                <span class="blue">for</span>(<span class="blue">var</span> y:int=0; y&lt;Columns; y++)
+                {
+                    cell = Grid[x][y];
+
+                    <span class="green">// If a cell has a mine but isn't flagged then we can't have won</span>
+                    <span class="blue">if</span>(cell.Mined == <span class="blue">true</span> &amp;&amp; !cell.Flagged)
+                    <span class="blue">return</span>;
+                }
+            }
+
+            Playing = <span class="blue">false</span>;
+            Clock.<span class="olive">stop</span>();
+            WinNotice.<span class="olive">visible</span> = <span class="blue">true</span>;
+        }
+
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> Lose():<span class="blue">void</span>
+        {
+            <span class="blue">var</span> cell:Cell;
+
+            <span class="blue">for</span>(<span class="blue">var</span> x:int=0; x&lt;Rows; x++)
+            {
+                <span class="blue">for</span>(<span class="blue">var</span> y:int=0; y&lt;Columns; y++)
+                {
+                    cell = Grid[x][y];
+                    Cell.FinalReveal(cell);
+                }
+            }
+
+            Playing = <span class="blue">false</span>;
+            Clock.<span class="olive">stop</span>();
+        }
+
+        <span class="green">// Removes every blank adjacent cell when we click a blank</span>
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> ClearEmptySpaces(x:int, y:int):<span class="blue">void</span>
+        {
+            <span class="blue">var</span> adjacentcells:<span class="olive">Array</span> = Cell.AdjacentCells(x, y);
+
+            <span class="blue">if</span>(adjacentcells.<span class="olive">length</span> == 0)
+            <span class="blue">return</span>;
+
+            <span class="blue">var</span> cell:Cell;
+            <span class="blue">var</span> ax:int;
+            <span class="blue">var</span> ay:int;
+
+            <span class="blue">for</span>(<span class="blue">var</span> i:int=0; i&lt;adjacentcells.<span class="olive">length</span>; i++)
+            {
+                ax = adjacentcells[i].X;
+                ay = adjacentcells[i].Y;
+                cell = Grid[ax][ay];
+
+                <span class="blue">if</span>(cell.Mined || cell.Flagged)
+                <span class="blue">continue</span>;
+
+                <span class="blue">if</span>(cell.Adjacent == 0)
+                {
+                    Cell.Blank(cell);
+                    ClearEmptySpaces(ax, ay);
+                }
+                <span class="blue">else</span>
+                {
+                    Cell.Reveal(cell);
+                }
+            }
+        }
+
+        <span class="green">// Checks if a cell coordinate is valid</span>
+        <span class="blue">public</span> <span class="blue">static</span> <span class="blue">function</span> InRange(x:int, y:int):<span class="olive">Boolean</span>
+        {
+            <span class="blue">return</span> (x &gt; -1 &amp;&amp; y &gt; -1 &amp;&amp; x &lt; Rows &amp;&amp; y &lt; Columns &amp;&amp; Grid[x][y] != <span class="blue">null</span> &amp;&amp; Grid[x][y].Ignore == <span class="blue">false</span>);
+        }
+    }
+}</pre>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/minesweeper/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/minesweeper/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/minesweeper/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/minesweeper/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/minesweeper/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/minesweeper/source/Coordinates.as.html">Source: Coordinates.as</a></li>
+				<li><a href="/minesweeper/source/minesweeper.zip">Download the complete source</a></li>
+			</ul>
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

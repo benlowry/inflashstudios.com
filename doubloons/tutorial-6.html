@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Part 6: Creating levels | Learn how to make Bloons in Flash ~ InFlash Studios</title>
+	<style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Bloons in Flash</h1>
+			
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+			
+			<h1>Part 6: Creating levels</h1>
+
+			<p>Each level consists of two parts, a definition in our ActionScript and a MovieClip that is the actual level.  The definition tracks properties like how many coins we need to get to complete a level and how many shots we have.</p>
+
+			<h2>The Code</h2>
+			<p>We begin with a simple definition of a level.</p>
+
+			<pre class="brush: actionscript3">package Doubloons
+{   
+    public class Level
+    {
+        public var Clip:Class;
+        public var Shots:int;
+        public var CoinsToWin:int;
+    }
+}</pre>
+
+			<p>Because we need to restart levels all the time we define each level as a public static function.  That means whenever we want "level1" we can just call Level.Level1();</p>
+			<p>These methods (one for each level) also go inside our Level class.</p>
+
+			<pre class="brush: actionscript3">public static function Level1():Level
+{
+	var level:Level = new Level();
+	level.Shots = 5;
+	level.CoinsToWin = 20;
+	level.Clip = Doubloons.Level1;
+	
+	return level;
+}</pre>
+
+			<h2>The MovieClips</h2>
+			<p>You'll notice the property "Clip" in our level.  This refers to a linked MovieClip from our library.  Each "Clip" is a full level sitting in our FLA's library.
+
+			<div class="image">
+				<img src="/doubloons/images/levels.jpg" alt="The levels" />
+				The levels in our FLA library
+			</div>
+			
+			<p>Each level clip is a complete level, we just put coins and anything else where we want them because the type is detected automatically back in our Game Loop from our Document class.</p>
+
+			<div class="image">
+				<img src="/doubloons/images/level.jpg" alt="A level" />
+				A level
+			</div>
+
+			<p>That's it, nothing else to explain really.  If it doesn't make sense yet grab the source, go through it, read through the tute again.  There's a lot of things to keep track of but you'll get the hang of it as you start to see the big picture when you're looking at each component of it.  Then you're ready to start building your own Bloons-style game!</p>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="doubloons.html">Play the game</a></li>
+				<li><a href="tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="tutorial-2.html">Part 2: Setting up our Document class</a></li>
+				<li><a href="tutorial-3.html">Part 3: Programming the scenery - clouds, seagulls, water</a></li>
+				<li><a href="tutorial-4.html">Part 4: Game screens</a></li>
+				<li><a href="tutorial-5.html">Part 5: Sounds and Saving</a></li>
+				<li><a href="tutorial-6.html">Part 6: Creating the levels</a></li>
+				<li><a href="/source/doubloons.zip">Download the complete source</a></li>
+			</ul>
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

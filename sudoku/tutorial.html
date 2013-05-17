@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Part 1: Understanding the game and setting up our FLA | Learn how to make Sudoku in Flash ~ InFlash Studios</title>
+    <style type="text/css">
+		@import url("/style.css");
+	</style>
+	<script type="text/javascript" src="/AC_RunActiveContent.js"></script>
+	<script type="text/javascript">
+	function show(img, el)
+	{
+		document.getElementById(el).src = img;
+	}
+	</script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/codehighlighter/scripts/shBrushAS3.js"></script>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="/codehighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+	SyntaxHighlighter.config.clipboardSwf = '/codehighlighter/scripts/clipboard.swf';
+	SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+
+	<a name="top"></a>
+
+	<div id="wrapper">
+
+		<div id="header">
+			<a class="logo" href="http://www.inflashstudios.com/" title="InFlash Studios"><img src="/images/logo.jpg" alt="InFlash Studios" /></a>
+		</div>
+
+		<div id="menu">
+
+			<h2>Games</h2>
+			<ul>
+				<li><a href="/inktd.html">INKTD</a></li>
+				<li><a href="/pathillogical-levelpack.html">Pathillogical Level Pack</a></li>
+				<li><a href="/gg15.html">Great Game 1/5</a></li>
+				<li><a href="/trickochet.ahtmlspx">Trickochet</a></li>
+				<li><a href="/pathillogical.html">Pathillogical</a></li>
+				<li><a href="/squarethere.html">SquareThere</a></li>
+				<li><a href="/cannonplunder.html">Cannon Plunder</a></li>
+				<li><a href="/colorfill2.html">ColorFill 2</a></li>
+				<li><a href="/colorfill.html">ColorFill</a></li>
+				<li><a href="/highsmiling.html">High Smiling</a></li>
+				<li><a href="/holdtheline.html">Hold The Line</a></li>
+				<li><a href="/thehorde2.html">The Horde 2</a></li>
+				<li><a href="/thehorde.html">The Horde</a></li>
+				<li><a href="/xenocide.html">Xenocide</a></li>
+				<li><a href="/dopewars.html">Dopewars</a></li>
+				<li><a href="/minesweeper.html">Minesweeper</a></li>
+				<li><a href="/sudoku.html">Sudoku</a></li>
+			</ul>
+
+			<h2>Mini-sites</h2>
+			<ul>
+				<li><a href="http://www.cannonplunder.com/">CannonPlunder.com</a></li>
+				<li><a href="http://colorfilled.com/">ColorFilled.com</a></li>
+			</ul>
+
+			<h2>Tutorials</h2>
+			<ul>
+				<li><a href="/minesweeper/tutorial.html">Minesweeper Tutorial</a></li>
+				<li><a href="/sudoku/tutorial.html">Sudoku Tutorial</a></li>
+				<li><a href="/doubloons/tutorial.html">Bloons Tutorial</a></li>
+			</ul>
+
+		</div>
+
+		<div id="content">	
+			
+	<div class="box">
+
+		<img class="boxedge" src="/images/boxtop.png" alt="" />
+
+		<div class="boxinner">
+
+			<h1>Creating Sudoku in Flash</h1>
+			
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/sudoku/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/sudoku/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/sudoku/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/sudoku/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/sudoku/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/sudoku/source/sudoku.zip">Download the complete source</a></li>
+			</ul>
+
+			<h1>Part 1: Understanding the game and setting up our FLA</h1>
+
+			<h2>Introduction</h2>
+			<p>The first step to creating any game is to understand what it is you're trying to make.  Sudoku is a very simple game to understand, it consists of rows, columns and 3x3 regions and each must have exactly 1 of each number from 1 to 10.  You can read more about it <a href="http://en.wikipedia.org/wiki/Sudoku">at Wikipedia</a>.</p>
+			<p>Breaking it down even further we have a 9x9 grid which forms the rows, columns and regions, and each of those cells needs to let users enter a number or have a number locked in by the game.</p>
+
+			<div class="image">
+				<img src="/sudoku/images/sudoku-grid.gif" alt="A sudoku grid" />
+				A sudoku grid
+			</div>
+
+			<p>Now that we have an understanding of the game we can begin to make it in Flash.</p>
+
+			<h2>Setting up our Flash file</h2>
+			<p>For this example we're going to use a hybrid of creating elements on our stage and programmatically through ActionScript.  Our presentation is going to use 4 different layers.  A background, the grid background, the grid lines, and interface components.</p>
+
+			<div class="image">
+				<img src="/sudoku/images/sudoku-fla-setup.jpg" alt="Setting up your Sudoku FLA" />
+				The structure of our FLA
+			</div>
+
+			<p>If you're new to Flash you should note that I've assigned each of these layers a name and a single purpose.  This is an important habit to build, you never know when you will come back to a FLA file to do some more work and the default names "Layer X" quickly become meaningless.</p>
+
+			<h3>The background</h3>
+			<p>The background is just a drawn "rectangle primitive" with some curvature applied to it.</p>
+			
+			<div class="image">
+				<img src="/sudoku/images/sudoku-background-1.jpg" alt="Selecting the primitive rectangle tool in Flash" />
+				Selecting the rectangle primitive tool in Flash
+			</div>
+
+			<div class="image">
+				<img src="/sudoku/images/sudoku-background-2.jpg" alt="Adjusting the rectangle primitive properties to add curvature" />
+				Adjusting the rectangle primitive properties to add curvature
+			</div>
+
+			<h3>The grid background</h3>
+			<p>In this game I decided one grid cell should be 50x50 pixels.  I prefer a more subtle way of indicating the grids than very thick black lines, so to create the grid background I drew 2 ordinary rectangles, one light gray and one dark gray, each covering one region (3x3 cells, 150x150 pixels).  Group them using CTRL + G to make it easier to copy &amp; paste them.</p>
+
+			<div class="image">
+				<img src="/sudoku/images/sudoku-grid-background.gif" alt="Our grid background rectangles" />
+				Our grid background rectangles
+			</div>
+
+			<p>Once you have drawn them you just copy &amp; paste them to form the 3x3 regions using a checkerboard style and aligning them flush next to each other.  Because they are exactly 150x150 pixels .</p>
+
+			<h3>The grid lines</h3>
+			<p>The grid lines are just plain white lines forming a 9x9 grid of the cells, each 50x50 pixels.  I didn't put lines for the edges.</p>
+
+			<h3>The interface</h3>
+			<p>These are the actual buttons within the game that people are going to click on.  There are three buttons, New Game, Hint and Solve.</p>
+			<p>To create a button in Flash select the Text tool, click somewhere on the stage (make sure you select our Interface layer), write the button text, select the Pointer tool so the text is committed to the stage and then press F8.</p>
+			
+			<div class="image">
+				<img src="/sudoku/images/creating-a-button.jpg" alt="Creating a button in Flash" />
+				Creating a button
+			</div>
+
+			<p>Give each button a meaningful name, like "NewGameButton", and then make sure you assign an <em>instance name</em> to the button on the stage.  You do this by selecting the button and then in the Properties dialogue entering text in the &lt;Instance Name&gt; textfield.</p>
+
+			<div class="image">
+				<img src="/sudoku/images/instance-name.jpg" alt="Assigning an instance name in Flash" />
+				Assigning an instance name
+			</div>
+
+			<p>This is a very important step because the instance name allows us to access the button from our code.</p>
+			
+			<h3>Our win dialogue</h3>
+			<p>When the player has won the game we want to display a message saying so.  To do this we create a movieclip (created the same way as buttons) called WinDialogue.  There's one significant difference to the buttons though, we're sharing this asset with the code so it can be programatically created.</p>
+
+			<div class="image">
+				<img src="/sudoku/images/win-dialogue.jpg" alt="Our win dialogue's properties" />
+				The win dialogue's properties
+			</div>
+			
+			<p>Once you have done all of this you're ready to <a href="/sudoku/tutorial-2.aspx">start coding the game</a>.</p>
+
+			<h3>Tutorial parts</h3>
+			<ul class="submenu">
+				<li><a href="/sudoku/tutorial.html">Part 1: Understanding the game and setting up our FLA</a></li>
+				<li><a href="/sudoku/tutorial-2.html">Part 2: Programming the game</a></li>
+				<li><a href="/sudoku/tutorial-3.html">Part 3: Programming the cells</a></li>
+				<li><a href="/sudoku/source/Game.as.html">Source: Game.as</a></li>
+				<li><a href="/sudoku/source/Cell.as.html">Source: Cell.as</a></li>
+				<li><a href="/sudoku/source/sudoku.zip">Download the complete source</a></li>
+			</ul>
+
+		</div>
+
+		<img class="boxedge" src="/images/boxbottom.png" alt="" />
+
+	</div>
+
+			<div id="footer">
+				<p>&copy; 2009 <a href="http://www.inflashstudios.com/">InFlash Studios</a> | 
+				<a href="http://www.cannonplunder.com/">Cannon Plunder.com</a> | 
+
+				<a href="http://lvlboost.com/">Game analytics</a> | 
+				<a href="http://playtomic.org/">Tools for game developers</a> | 				
+				<a href="http://playtomic.com/iphone-analytics">iPhone Analytics</a>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>
